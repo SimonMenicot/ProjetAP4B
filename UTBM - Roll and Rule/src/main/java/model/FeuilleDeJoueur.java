@@ -24,6 +24,25 @@ public class FeuilleDeJoueur {
         return 0;
     }
 
+    public String getName() {
+        return this.nomJoueur;
+    }
+    public int createSecteur() {
+        // A faire
+        for (int i = 1; i < 4 + 1; i++) {
+            if (i == 1) {
+                this.secteurs.add(new Secteur(i,"contratSub", "poleAdmin"));
+            }
+            else if (i == 2) {
+                this.secteurs.add(new Secteur(i,"constitAsso", "resEtudiante"));
+            }
+            else if (i == 3){
+                this.secteurs.add(new Secteur(i, "publiThese", "labRecherche"));
+            }
+        }
+        return 0;
+    }
+
 
     public int getScoreFinal() {
         return scoreFinal;
