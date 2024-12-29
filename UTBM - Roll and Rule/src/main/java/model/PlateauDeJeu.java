@@ -2,6 +2,7 @@ package main.java.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;  // Import the Scanner class
 
 public class PlateauDeJeu {
     private RoueDesSemestres roue;
@@ -12,7 +13,21 @@ public class PlateauDeJeu {
     public PlateauDeJeu(int nombreJoueurs) {
         this.roue = new RoueDesSemestres();
         this.feuillesJoueurs = new ArrayList<>();
-        // à continuer d'implémenter
+
+        // Création des feuilles de joueur
+        for (int i = 1; i < nombreJoueurs + 1; i++) {
+            Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+            System.out.println("Entrez le nom du joueur " + i + " ");
+            String name = myObj.nextLine();  // Read user input
+            //System.out.println("Nom du joueur " + i + ": ");  // Output user input
+
+            this.feuillesJoueurs.add(new FeuilleDeJoueur(name));
+            for (FeuilleDeJoueur joueur : this.feuillesJoueurs) {
+                System.out.println(joueur.getName());
+                // petit souci je sais pas pourquoi à chaque tour la boucle à l'air de passer par
+                // tous les elements de la liste genre la à chaque tour ca print tous les noms
+            }
+        }
     }
 
     public void jouerTour() {
