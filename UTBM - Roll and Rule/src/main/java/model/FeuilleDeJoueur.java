@@ -27,6 +27,8 @@ public class FeuilleDeJoueur {
     public String getName() {
         return this.nomJoueur;
     }
+    // J'ai pas trop compris le Secteur[3] ducoup j'ai fait ca, ca marche pas vu que je sais pas comment me servir du Secteur[3]
+    // mais dans l'idée faut juste modifier le .add et mettre le bon truc pour ajouter
     public int createSecteur() {
         // A faire
         for (int i = 1; i < 4 + 1; i++) {
