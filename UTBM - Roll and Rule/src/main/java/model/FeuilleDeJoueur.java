@@ -1,5 +1,8 @@
 package main.java.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FeuilleDeJoueur {
     protected String nomJoueur;
     protected int nbEtudiants;
@@ -7,7 +10,7 @@ public class FeuilleDeJoueur {
     protected int nbPersonnels;
     protected int scoreFinal;
 
-    private Secteur[] secteurs;
+    private List<Secteur> secteurs;
 
     public FeuilleDeJoueur(String nomJoueur) {
         this.nomJoueur = nomJoueur;
@@ -16,7 +19,7 @@ public class FeuilleDeJoueur {
         this.nbPersonnels = 0;
         this.scoreFinal = 0;
 
-        this.secteurs = new Secteur[3];
+        this.secteurs = new ArrayList<>();
     }
 
     public int calculScore() {
@@ -33,13 +36,13 @@ public class FeuilleDeJoueur {
         // A faire
         for (int i = 1; i < 4 + 1; i++) {
             if (i == 1) {
-                this.secteurs.add(new Secteur(i,"contratSub", "poleAdmin"));
+                this.secteurs.add(new Secteur(i,"Contrat de Subvention", "Pole administratif"));
             }
             else if (i == 2) {
-                this.secteurs.add(new Secteur(i,"constitAsso", "resEtudiante"));
+                this.secteurs.add(new Secteur(i,"Constitution d'une association", "Residence étudiante"));
             }
             else if (i == 3){
-                this.secteurs.add(new Secteur(i, "publiThese", "labRecherche"));
+                this.secteurs.add(new Secteur(i, "Publication d'une thèse", "Laboratoire de recherche"));
             }
         }
         return 0;
