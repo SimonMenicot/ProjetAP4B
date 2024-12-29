@@ -1,25 +1,35 @@
 package main.java.model;
 
-public class RoueDesSemestres {
-    protected int numeroTour;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;  // Import the Scanner class
 
-    private Salle[] salles;
-    private De[] des;
+public class PlateauDeJeu {
+    private RoueDesSemestres roue;
+    private List<FeuilleDeJoueur> feuillesJoueurs;
 
-    public RoueDesSemestres() {
-        this.numeroTour = 0;
 
-        this.salles = new Salle[9]; //Initialiser les 9 salles
-        this.des = new De[4]; //Initialiser les 4 dés
-    }
 
-    public void nouveauTour() {
-        if (numeroTour < 16) {
-            numeroTour++;
+    public PlateauDeJeu(int nombreJoueurs) {
+        this.roue = new RoueDesSemestres();
+        this.feuillesJoueurs = new ArrayList<>();
+
+        // Création des feuilles de joueurs
+        for (int i = 1; i < nombreJoueurs + 1; i++) {
+            Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+            System.out.println("Entrez le nom du joueur " + i + " ");
+            String name = myObj.nextLine();  // Read user input
+            //System.out.println("Nom du joueur " + i + ": ");  // Output user input
+
+            this.feuillesJoueurs.add(new FeuilleDeJoueur(name));
+        }
+        for (FeuilleDeJoueur joueur : this.feuillesJoueurs){
+            System.out.println(joueur.getName());
         }
     }
 
-    public void ordonnerDes() {
-        // à implémenter
+    public void jouerTour() {
+        roue.nouveauTour();
+        // à continuer d'implémenter
     }
 }
