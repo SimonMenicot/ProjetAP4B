@@ -49,7 +49,7 @@ public class GraphicalInterface {
 
         // Zone sélection du dé sous la zone de texte
         JPanel diceSelectionPanel = new JPanel();
-        diceSelectionPanel.setLayout(new GridLayout(4, 1, 5, 5));
+        diceSelectionPanel.setLayout(new GridLayout(2, 2, 5, 5));
         diceSelectionPanel.setBorder(BorderFactory.createTitledBorder("Sélection du dé"));
 
         for (int i = 1; i <= 4; i++) {
