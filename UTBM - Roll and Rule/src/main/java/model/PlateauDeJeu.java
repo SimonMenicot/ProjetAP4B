@@ -2,7 +2,7 @@ package main.java.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;  // Import the Scanner class
+import java.util.Scanner;
 
 public class PlateauDeJeu {
     private RoueDesSemestres roue;

@@ -1,35 +1,24 @@
 package main.java.model;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;  // Import the Scanner class
 
-public class PlateauDeJeu {
-    private RoueDesSemestres roue;
-    private List<FeuilleDeJoueur> feuillesJoueurs;
+public class RoueDesSemestres {
+    protected int numeroTour;
+    private List<Salle> salles;
+    private List<De> des;
 
-
-
-    public PlateauDeJeu(int nombreJoueurs) {
-        this.roue = new RoueDesSemestres();
-        this.feuillesJoueurs = new ArrayList<>();
-
-        // Création des feuilles de joueurs
-        for (int i = 1; i < nombreJoueurs + 1; i++) {
-            Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-            System.out.println("Entrez le nom du joueur " + i + " ");
-            String name = myObj.nextLine();  // Read user input
-            //System.out.println("Nom du joueur " + i + ": ");  // Output user input
-
-            this.feuillesJoueurs.add(new FeuilleDeJoueur(name));
-        }
-        for (FeuilleDeJoueur joueur : this.feuillesJoueurs){
-            System.out.println(joueur.getName());
+    public RoueDesSemestres() {
+        this.numeroTour = 0;
+        this.salles = new ArrayList<>();; //Initialiser les 9 salles
+        this.des = new ArrayList<>();; //Initialiser les 4 dés
+        //Il faut rajouter ici l'initialisation des objets précédents !
+    }
+    public void nouveauTour() {
+        if (numeroTour < 16) {
+            numeroTour++;
         }
     }
-
-    public void jouerTour() {
-        roue.nouveauTour();
-        // à continuer d'implémenter
+    public void ordonnerDes() {
+        // à implémenter
     }
 }
