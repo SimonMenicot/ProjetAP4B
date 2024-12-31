@@ -1,10 +1,15 @@
 package main.java.view;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class GraphicalInterface {
-
+    private BufferedImage image;
     private JFrame frame;
     private JLabel selectedDieInfo;
     private JLabel playerNameLabel;
@@ -23,8 +28,7 @@ public class GraphicalInterface {
 
         // Image de fond au centre
         JLabel backgroundLabel = new JLabel();
-        backgroundLabel.setIcon(new ImageIcon("path/to/your/background/image.jpg")); // Remplacer par le chemin de votre image
-        backgroundLabel.setHorizontalAlignment(JLabel.CENTER);
+        loadImage("/player_board_utbm.jpg", backgroundLabel);
 
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.add(backgroundLabel, BorderLayout.CENTER);
@@ -67,13 +71,12 @@ public class GraphicalInterface {
         frame.add(leftPanel, BorderLayout.WEST);
 
         // Panneau pour les boutons à droite de l'image
-        JPanel rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        JPanel rightPanel = new JPanel(new BorderLayout());
 
-        // Zone affichage des informations du dé sélectionné
+        // Zone affichage des informations du dé sélectionné (au centre de la colonne droite)
         selectedDieInfo = new JLabel("Aucun dé sélectionné", JLabel.CENTER);
         selectedDieInfo.setBorder(BorderFactory.createTitledBorder("Informations du dé"));
-        rightPanel.add(selectedDieInfo);
+        rightPanel.add(selectedDieInfo, BorderLayout.NORTH);
 
         // Zone modification du dé
         JPanel modifyDiePanel = new JPanel();
@@ -100,7 +103,7 @@ public class GraphicalInterface {
 
         modifyDiePanel.add(colorPanel);
 
-        rightPanel.add(modifyDiePanel);
+        rightPanel.add(modifyDiePanel, BorderLayout.CENTER);
 
         // Zone choix action
         JPanel actionPanel = new JPanel();
@@ -115,12 +118,27 @@ public class GraphicalInterface {
         actionPanel.add(buildFunctionButton);
         actionPanel.add(prestigeActionButton);
 
-        rightPanel.add(actionPanel);
+        rightPanel.add(actionPanel, BorderLayout.SOUTH);
 
         frame.add(rightPanel, BorderLayout.EAST);
 
         // Afficher la fenêtre
         frame.setVisible(true);
+    }
+
+    private void loadImage(String imagePath, JLabel backgroundLabel) {
+        try {
+            // Charge l'image à partir du classpath
+
+            image = ImageIO.read(new File(imagePath));
+            if (image != null) {
+                backgroundLabel.setIcon(new ImageIcon(image));
+            } else {
+                throw new IOException("L'image n'a pas pu être lue.");
+            }
+        } catch (IOException e) {
+            System.out.println("Erreur lors du chargement de l'image : " + e.getMessage());
+        }
     }
 
     public static void main(String[] args) {
