@@ -14,5 +14,13 @@ public class Salle {
     public void retourner() {
         retourne = !retourne;
     }
+
+    public int getSecteur(){
+        if (retourne){
+            return secteurVerso;
+        }else{
+            return secteurRecto;
+        }
+    }
 }
 
