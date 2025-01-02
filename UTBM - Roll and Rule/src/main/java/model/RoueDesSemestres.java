@@ -36,7 +36,7 @@ public class RoueDesSemestres {
                 // System.out.println("Recto : " + instance_salle.getSecteur());
             }
         }
-        
+
         // Initialisation des dés
         for (int i = 1; i < 3 + 1; i++) {
             this.des.add(new De(true));
@@ -50,6 +50,19 @@ public class RoueDesSemestres {
         }
     }
     public void ordonnerDes() {
-        // à implémenter
+        List<De> tmp = new ArrayList<>();
+        De min = this.des.getFirst();
+        for (int i = 1; i < 4; i++) {
+            for (De instance_de : this.des){
+                if (min.getValeur() > instance_de.getValeur()){
+                    min = instance_de;
+                } else if (instance_de.getValeur() == min.getValeur() && instance_de.isTransparent()){
+                    min = instance_de;
+                }
+            }
+            tmp.add(min);
+            this.des.remove(min);
+        }
+        this.des.addAll(tmp);
     }
 }
