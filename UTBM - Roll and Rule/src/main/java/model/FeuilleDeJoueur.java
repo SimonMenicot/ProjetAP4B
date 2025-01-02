@@ -23,8 +23,14 @@ public class FeuilleDeJoueur {
     }
 
     public int calculScore() {
-        // à implémenter (appeler calculScore des secteur, points des habitants,...)
-        return 0;
+        int score = 0;
+        for (Secteur s : secteurs){
+            score +=s.calculScore();
+        }
+        score+=nbEnseignants;
+        score+=nbEtudiants;
+        score+=nbPersonnels;
+        return score;
     }
 
     public String getName() {

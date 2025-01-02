@@ -53,6 +53,7 @@ public class Secteur {
                 score += multBatFonction;
             }
         }
+        score += ressources/2; // int et int -> division entière
         return score;
     }
 }
