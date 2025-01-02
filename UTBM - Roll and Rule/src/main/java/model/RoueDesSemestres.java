@@ -24,6 +24,7 @@ public class RoueDesSemestres {
         this.salles.add(new Salle(1,2));
         this.salles.add(new Salle(1,1));
 
+        // Ici on va aléatoirement décider pour chaque salle si on la retourne ou non
         Random rand = new Random();
         for (Salle instance_salle : this.salles){
             int rand_retourner = rand.nextInt(2);
@@ -35,10 +36,12 @@ public class RoueDesSemestres {
                 // System.out.println("Recto : " + instance_salle.getSecteur());
             }
         }
-
+        
+        // Initialisation des dés
         for (int i = 1; i < 3 + 1; i++) {
             this.des.add(new De(true));
         }
+        // Dé noir
         this.des.add(new De(false));
     }
     public void nouveauTour() {
