@@ -5,8 +5,8 @@ import java.util.Random;
 
 public class RoueDesSemestres {
     protected int numeroTour;
-    private List<Salle> salles;
-    private List<De> des;
+    protected List<Salle> salles;
+    protected List<De> des;
 
     public RoueDesSemestres() {
         this.numeroTour = 0;
@@ -44,11 +44,16 @@ public class RoueDesSemestres {
         // Dé noir
         this.des.add(new De(false));
     }
-    public void nouveauTour() {
+    public void nouveauTour()
         if (numeroTour < 16) {
-            numeroTour++;
-        }
+        numeroTour++;
     }
+        for(int i = 0; i < 4; i++){
+        this.des.get(i).lancer();
+    }
+    ordonnerDes();
+
+}
     public void ordonnerDes() {
         List<De> tmp = new ArrayList<>();
         De min = this.des.getFirst();
