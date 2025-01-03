@@ -18,7 +18,7 @@ public class Secteur {
         this.nomBatFonction = nomBatFonction;
         this.multBatFonction = 0;
         this.multActPrestige = 0;
-        this.ressources = 0; // à remplacer par les ressources initiales
+        this.ressources = 3; // à remplacer par les ressources initiales
         this.ressourcesUtilisees = 0;
     }
 
@@ -55,5 +55,13 @@ public class Secteur {
         }
         score += ressources/2; // int et int -> division entière
         return score;
+    }
+
+    public void coupureBudget(int colonne){
+        projetConcevable[colonne] = false;
+    }
+
+    public boolean isConcevable(int colonne){
+        return projetConcevable[colonne];
     }
 }

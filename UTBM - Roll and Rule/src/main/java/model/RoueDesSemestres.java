@@ -44,16 +44,18 @@ public class RoueDesSemestres {
         // Dé noir
         this.des.add(new De(false));
     }
-    public void nouveauTour()
-        if (numeroTour < 16) {
-        numeroTour++;
-    }
-        for(int i = 0; i < 4; i++){
-        this.des.get(i).lancer();
-    }
-    ordonnerDes();
 
-}
+    public void nouveauTour(){
+        if (numeroTour < 16) {
+            numeroTour++;
+        }
+            for(int i = 0; i < 4; i++){
+            this.des.get(i).lancer();
+        }
+        ordonnerDes();
+
+    }
+
     public void ordonnerDes() {
         List<De> tmp = new ArrayList<>();
         De min = this.des.getFirst();
@@ -61,7 +63,7 @@ public class RoueDesSemestres {
             for (De instance_de : this.des){
                 if (min.getValeur() > instance_de.getValeur()){
                     min = instance_de;
-                } else if (instance_de.getValeur() == min.getValeur() && instance_de.isTransparent()){
+                } else if (instance_de.getValeur() == min.getValeur() && !instance_de.isTransparent()){
                     min = instance_de;
                 }
             }
@@ -69,5 +71,15 @@ public class RoueDesSemestres {
             this.des.remove(min);
         }
         this.des.addAll(tmp);
+    }
+
+    public int getTour(){
+        return numeroTour;
+    }
+
+    int getSecteur(De de){
+        int indexSalle = (des.indexOf(de)+(numeroTour-1)/2)%9;
+        //(numeroTour-1)/2 pour avoir la rotation de la roue en fonction du tour, %9 pour retourner au bon index lors du dépassement
+        return salles.get(indexSalle).getSecteur();
     }
 }

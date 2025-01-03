@@ -8,7 +8,7 @@ import java.lang.Math;
 public class PlateauDeJeu {
     private RoueDesSemestres roue;
     private List<FeuilleDeJoueur> feuillesJoueurs;
-    private nbJoueur;
+    private int nbJoueur;
 
 
 
@@ -32,42 +32,46 @@ public class PlateauDeJeu {
     }
 
     public void jouerTour() {
+        /* Initialisation du tour */
         roue.nouveauTour();
-        if (roue.numeroTour >= 3){
+        int tour = roue.getTour();
+        if (tour >= 6){ // 6 semestres = 3 années
             int i = 0;
             while (!roue.des.get(i).isTransparent()){
                 i++;
             }
-            int numero = roue.des.get(i).valeur;
+            De deNoir = roue.des.get(i);
+            int secteur = roue.getSecteur(deNoir);
             for(int j = 0; j < nbJoueur; j++){
-                if(!feuillesJoueurs.get(j).secteurs.get(0).actPrestige[numero]){
-                    for( i = 0; i < 3 ; i++){
-                        feuillesJoueurs.get(j).secteurs.get(i).projetConcevable[numero] = false;
-                    }
-                }
+                feuillesJoueurs.get(j).coupureBudget(secteur, deNoir.getValeur());
             }
         }
+
+        /* Actions des joueurs */
         for ( int i = 0 ; i < nbJoueur ; i++){
             FeuilleDeJoueur f = feuillesJoueurs.get(i);
-            System.out.println("C'est a " + f.getName() + " de jouer\n\n");
-            boolean peuxJouer = false;
+            System.out.println("C'est à " + f.getName() + " de jouer\n\n");
+            boolean peuxJouer = roue.des.get(0).isTransparent();
+            // peux jouer est false si le joueur n'a aucune ressource et que le dé noir est en 1ère position
             for(int j = 0 ; j < 3 ; j++){
-                if(f.secteurs.get(j).ressources-f.secteurs.get(j).ressourcesUtilisees>0){
+                if(f.getRessources(j)>0){
                     peuxJouer = true;
                 }
             }
+
             if(peuxJouer){
-                System.out.println("Affichage des des :\n");
+                System.out.println("Affichage des dés :\n");
 
                 for(int j = 0 ; j < 4 ; j++){
-                    if(roue.numeroTour%2==1){
-                        System.out.println("De " + (i+1) +"\tValeur : " + roue.des.get(i).valeur + ", Couleur : " + couleurSalle(roue.salles.get(i+1).getSecteur()));
+                    if(tour%2==1){
+                        System.out.println("De " + (j+1) +"\tValeur : " + roue.des.get(j).getValeur() + ", Couleur : " + couleurSalle(roue.salles.get(j+tour/2).getSecteur()));
                     }else{
-                        System.out.println("De " + (i+1) +"\tValeur : " + roue.des.get(i).valeur + ", Couleur : " + couleurSalle(roue.salles.get(i+5).getSecteur()));
+                        System.out.println("De " + (j+1) +"\tValeur : " + roue.des.get(j).getValeur() + ", Couleur : " + couleurSalle(roue.salles.get(j+tour/2+4).getSecteur()));
                     }
                 }
+                /* --------J'ai arrêté ma relecture ici--------- */
                 Scanner myObj = new Scanner(System.in);
-                System.out.println("Entrez le numero du de que vous souhaitez selectionner\n");
+                System.out.println("Entrez le numéro du dé que vous souhaitez sélectionner\n");
                 int numero = myObj.nextInt();
 
                 boolean incorrect;

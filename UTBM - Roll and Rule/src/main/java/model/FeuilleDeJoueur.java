@@ -58,4 +58,19 @@ public class FeuilleDeJoueur {
     public int getScoreFinal() {
         return scoreFinal;
     }
+
+    public void coupureBudget(int secteur, int colonne){
+        if (secteurs.get(0).actPrestige[colonne] == false){
+            secteurs.get(secteur).coupureBudget(colonne);
+        }
+    }
+
+    public boolean isConcevable(int secteur, int colonne){
+        return secteurs.get(secteur).isConcevable(colonne);
+    }
+
+    public int getRessources(int secteur){
+        return secteurs.get(secteur).getRessources();
+    }
+
 }
