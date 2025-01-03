@@ -49,7 +49,7 @@ public class RoueDesSemestres {
         if (numeroTour < 16) {
             numeroTour++;
         }
-            for(int i = 0; i < 4; i++){
+        for(int i = 0; i < 4; i++){
             this.des.get(i).lancer();
         }
         ordonnerDes();
@@ -58,8 +58,8 @@ public class RoueDesSemestres {
 
     public void ordonnerDes() {
         List<De> tmp = new ArrayList<>();
-        De min = this.des.getFirst();
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < 5; i++) {
+            De min = this.des.getFirst();
             for (De instance_de : this.des){
                 if (min.getValeur() > instance_de.getValeur()){
                     min = instance_de;
@@ -69,6 +69,7 @@ public class RoueDesSemestres {
             }
             tmp.add(min);
             this.des.remove(min);
+            System.out.println("De : " + min.getValeur());
         }
         this.des.addAll(tmp);
     }
