@@ -36,7 +36,7 @@ public class PlateauDeJeu {
         /* Initialisation du tour */
         roue.nouveauTour();
         int tour = roue.getTour();
-        if (tour >= 6){ // 6 semestres = 3 années
+        if (tour >= 5){ // début de la troisième année au 5ème semestre
             int i = 0;
             while (!roue.des.get(i).isTransparent()){
                 i++;
@@ -60,7 +60,13 @@ public class PlateauDeJeu {
                 }
             }
 
-            if(peuxJouer){
+            if(!peuxJouer) {
+                System.out.println("Vous n'avez pas de ressource pour jouer, vous gagnez donc 1 ressource de chaque type\n");
+                for (int j = 0; j < 3; j++) {
+                    f.addRessources(j, 1);
+                }
+            }
+            else{
                 System.out.println("Affichage des dés :\n");
 
                 for(int j = 0 ; j < 4 ; j++){
@@ -82,36 +88,36 @@ public class PlateauDeJeu {
                         incorrect = true;
                     }else if(!roue.des.get(numero - 1).isTransparent){
                         incorrect = true;
-                    }else if(f.secteurs.get(1).ressources-f.secteurs.get(1).ressourcesUtilisees==0 && numero == 3 ) {
+                    }else if(f.getRessources(1)-f.getRessourcesUsed(1)<=1 && numero == 3) {
                         incorrect = true;
-                    }else if(f.secteurs.get(1).ressources-f.secteurs.get(1).ressourcesUtilisees==1 && numero == 4){
+                    }else if(f.getRessources(1)-f.getRessourcesUsed(1)<=2 && numero == 4){
                         incorrect = true;
                     }else if(numero == 2){
                         System.out.println("Quelle ressource souhaitez-vous dépensez (F/M/C)?");
                         char choix = myObj.next().charAt(0);
                         switch(choix){
                             case 'F':
-                                if(f.secteurs.getFirst().ressources-f.secteurs.getFirst().ressourcesUtilisees==0){
+                                if(f.getRessources(0)-f.getRessourcesUsed(0)==0){
                                     System.out.println("Vous n'avez pas assez de Fonds\n");
                                     incorrect = true;
                                 }else{
-                                    f.secteurs.getFirst().ressourcesUtilisees--;
+                                    f.useRessources(0, 1);
                                 }
                                 break;
                             case 'M':
-                                if(f.secteurs.get(1).ressources-f.secteurs.get(1).ressourcesUtilisees==0){
+                                if(f.getRessources(1)-f.getRessourcesUsed(1)==0){
                                     System.out.println("Vous n'avez pas assez de Motivation\n");
                                     incorrect = true;
                                 }else{
-                                    f.secteurs.get(1).ressourcesUtilisees--;
+                                    f.useRessources(1, 1);
                                 }
                                 break;
                             case 'C':
-                                if(f.secteurs.get(2).ressources-f.secteurs.get(2).ressourcesUtilisees==0){
+                                if(f.getRessources(2)-f.getRessourcesUsed(2)==0){
                                     System.out.println("Vous n'avez pas assez de Connaissance\n");
                                     incorrect = true;
                                 }else{
-                                    f.secteurs.get(2).ressourcesUtilisees--;
+                                    f.useRessources(2, 1);
                                 }
                                 break;
                             default:
@@ -120,9 +126,9 @@ public class PlateauDeJeu {
                         }
                     }else{
                         if(numero==3){
-                            f.secteurs.get(1).ressourcesUtilisees--;
+                            f.useRessources(1, 1);
                         }else if(numero==4){
-                            f.secteurs.get(1).ressourcesUtilisees-=2;
+                            f.useRessources(1, 2);
                         }
                     }
                     if(incorrect){
@@ -154,7 +160,7 @@ public class PlateauDeJeu {
                     int ressourceDisponible = 0;
                     switch(choix){
                         case 1:
-                            ressourceDisponible = f.secteurs.getFirst().ressources-f.secteurs.getFirst().ressourcesUtilisees;
+                            ressourceDisponible = f.getRessources(0)-f.getRessourcesUsed(0);
                             if(ressourceDisponible==0){
                                 System.out.println("Vous n'avez pas assez de Fond pour modifier la valeur du de\n");
                                 break;
@@ -197,13 +203,13 @@ public class PlateauDeJeu {
                             }
                             break;
                         case 2:
-                            ressourceDisponible = f.secteurs.get(2).ressources-f.secteurs.get(2).ressourcesUtilisees;
+                            ressourceDisponible = f.getRessources(2)-f.getRessourcesUsed(2);
                             if(ressourceDisponible<2){
-                                System.out.println("Vous n'avez pas assez de Connaissance pour modifier la valeur du de\n");
+                                System.out.println("Vous n'avez pas assez de Connaissance pour modifier la couleur du de\n");
                             }else{
                                 do{
                                     incorrect = false;
-                                    System.out.println("Vous avez " + ressourceDisponible + " ressource disponible pour modifier la couleur de la salle \n" +
+                                    System.out.println("Vous avez " + ressourceDisponible + " ressources disponibles pour modifier la couleur de la salle \n" +
                                             "(Couleur initial : " + couleurSalle(couleurInitial) +",\tCouleur actuelle : " + couleurSalle(couleurFinal) + "\n" +
                                             "En quelle couleur voulez-vous changer la salle (Orange/Bleu/Blanc)?\n");
                                     String couleur = myObj.next();
@@ -234,11 +240,12 @@ public class PlateauDeJeu {
                             }
                             break;
                         case 3:
-                            f.secteurs.get(1).ressources += valeurFinal;
+                            //f.secteurs.get(1).ressources += valeurFinal; Pas sur de ce que ça faisait
+                            f.addRessources(1, valeurFinal);
                             actionEffectuee = true;
                             break;
                         case 4:
-                            Secteur secteur = f.secteurs.get(couleurFinal);
+                            Secteur secteur = f.getSecteur(couleurFinal);
                             if(secteur.projetConcevable[valeurFinal]){
                                 if(secteur.actPrestige[valeurFinal] && secteur.batFonction[valeurFinal]){
                                     System.out.println("Impossible d'effectue une action avec ce de : les 2 actions ont deja ete faite\n");
@@ -284,18 +291,12 @@ public class PlateauDeJeu {
                     }
                 }while (!actionEffectuee);
 
-                f.secteurs.getFirst().ressourcesUtilisees+=Math.abs(valeurFinal-valeurInitial);
+                f.useRessources(0, Math.abs(valeurFinal-valeurInitial));
                 if(couleurInitial!=couleurFinal){
-                    f.secteurs.get(3).ressourcesUtilisees+=2;
+                    f.useRessources(2, 2);
                 }
 
                 //Implémentation de l'application des effets du batiment construit manquant,à rajouter
-
-            }else{
-                System.out.println("Vous n'avez pas de ressource pour jouer, gain de ressource minimum\n");
-                for(int j = 0 ; j < 3 ; j++){
-                    f.secteurs.get(j).ajouterRessource(1);
-                }
 
             }
         }

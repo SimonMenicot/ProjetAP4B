@@ -60,7 +60,7 @@ public class FeuilleDeJoueur {
     }
 
     public void coupureBudget(int secteur, int colonne){
-        if (secteurs.get(0).actPrestige[colonne] == false){
+        if (!secteurs.get(0).actPrestige[colonne]){
             secteurs.get(secteur).coupureBudget(colonne);
         }
     }
@@ -73,4 +73,11 @@ public class FeuilleDeJoueur {
         return secteurs.get(secteur).getRessources();
     }
 
+    public int getRessourcesUsed(int secteur){return secteurs.get(secteur).getRessourcesUtilisees();}
+
+    public void addRessources(int secteur, int ressources){secteurs.get(secteur).ressources += ressources;}
+
+    public void useRessources(int secteur, int ressources){secteurs.get(secteur).ressources += ressources;}
+
+    public Secteur getSecteur(int secteur){return secteurs.get(secteur);}
 }
