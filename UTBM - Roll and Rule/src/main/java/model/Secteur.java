@@ -18,7 +18,7 @@ public class Secteur {
         this.nomBatFonction = nomBatFonction;
         this.multBatFonction = 0;
         this.multActPrestige = 0;
-        this.ressources = 3; // à remplacer par les ressources initiales
+        this.ressources = 3;
         this.ressourcesUtilisees = 0;
     }
 
@@ -26,9 +26,7 @@ public class Secteur {
         this.ressources += val;
     }
 
-    public int getRessources() {
-        return this.ressources;
-    }
+    public int getRessources() {return this.ressources;}
 
     public int getRessourcesUtilisees() {
         return this.ressourcesUtilisees;
