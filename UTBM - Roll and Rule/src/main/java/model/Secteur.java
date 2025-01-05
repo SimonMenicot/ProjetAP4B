@@ -20,6 +20,12 @@ public class Secteur {
         this.multActPrestige = 0;
         this.ressources = 3;
         this.ressourcesUtilisees = 0;
+
+        for (int i = 0; i < 6; i++) {
+            projetConcevable[i] = true;
+            actPrestige[i] = false;
+            batFonction[i] = false;
+        }
     }
 
     public void ajouterRessource(int val) {
