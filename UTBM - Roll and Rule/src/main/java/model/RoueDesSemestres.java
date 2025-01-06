@@ -78,9 +78,13 @@ public class RoueDesSemestres {
         return numeroTour;
     }
 
-    int getSecteur(De de){
+    public int getSecteur(De de){
         int indexSalle = (des.indexOf(de)+(numeroTour-1)/2)%9;
         //(numeroTour-1)/2 pour avoir la rotation de la roue en fonction du tour, %9 pour retourner au bon index lors du dépassement
         return salles.get(indexSalle).getSecteur();
+    }
+
+    public De getDe(int n){
+        return des.get(n);
     }
 }

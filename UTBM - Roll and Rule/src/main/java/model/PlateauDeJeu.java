@@ -55,7 +55,7 @@ public class PlateauDeJeu {
             boolean peuxJouer = roue.des.get(0).isTransparent();
             // peux jouer est false si le joueur n'a aucune ressource et que le dé noir est en 1ère position
             for(int j = 0 ; j < 3 ; j++){
-                if(f.getRessources(j)>0){
+                if(f.getRessources(j)-f.getRessourcesUsed(j)>0){
                     peuxJouer = true;
                 }
             }
@@ -70,13 +70,13 @@ public class PlateauDeJeu {
                 System.out.println("Affichage des dés :\n");
 
                 for(int j = 0 ; j < 4 ; j++){
+                    String deNoir = !roue.getDe(j).isTransparent() ? ", dé noir" : "";
                     if(tour%2==1){
-                        System.out.println("De " + (j+1) +"\tValeur : " + roue.des.get(j).getValeur() + ", Couleur : " + couleurSalle(roue.salles.get(j+tour/2).getSecteur()));
+                        System.out.println("De " + (j+1) +"\tValeur : " + roue.des.get(j).getValeur() + ", Couleur : " + couleurSalle(roue.salles.get(j+tour/2).getSecteur()) + deNoir);
                     }else{
-                        System.out.println("De " + (j+1) +"\tValeur : " + roue.des.get(j).getValeur() + ", Couleur : " + couleurSalle(roue.salles.get(j+tour/2+4).getSecteur()));
+                        System.out.println("De " + (j+1) +"\tValeur : " + roue.des.get(j).getValeur() + ", Couleur : " + couleurSalle(roue.salles.get(j+tour/2+4).getSecteur()) + deNoir);
                     }
                 }
-                /* --------J'ai arrêté ma relecture ici--------- */
                 Scanner myObj = new Scanner(System.in);
                 System.out.println("Entrez le numéro du dé que vous souhaitez sélectionner\n");
                 int numero = myObj.nextInt();
@@ -86,7 +86,7 @@ public class PlateauDeJeu {
                     incorrect = false;
                     if(numero < 1 || numero > 4){
                         incorrect = true;
-                    }else if(!roue.des.get(numero - 1).isTransparent){
+                    }else if(!roue.des.get(numero - 1).isTransparent()){
                         incorrect = true;
                     }else if(f.getRessources(1)-f.getRessourcesUsed(1)<=1 && numero == 3) {
                         incorrect = true;
@@ -138,16 +138,16 @@ public class PlateauDeJeu {
 
                 }while(incorrect);
 
-                int numeroSalle;
-                if(roue.numeroTour%2==1){
-                    numeroSalle = numero;
+                /*int numeroSalle;
+                if(tour%2==1){
+                    numeroSalle = numero + (tour-1)/2;
                 }else{
-                    numeroSalle = numero + 4;
-                }
-                int couleurInitial = roue.salles.get(numeroSalle).getSecteur();
-                int couleurFinal = roue.salles.get(numeroSalle).getSecteur();
-                int valeurInitial = roue.des.get(numeroSalle-1).getValeur();
-                int valeurFinal = roue.des.get(numero-1).getValeur();
+                    numeroSalle = numero + 4 + (tour-1)/2;
+                }*/
+                int couleurInitial = roue.getSecteur(roue.getDe(numero)); //roue.salles.get(numeroSalle).getSecteur();
+                int couleurFinal = couleurInitial;                        //"          "              "              "
+                int valeurInitial = roue.getDe(numero).getValeur();       //roue.des.get(numeroSalle-1).getValeur();
+                int valeurFinal = valeurInitial;                          // roue.des.get(numero-1).getValeur();
                 boolean actionEffectuee = false;
                 do{
                     System.out.println("Votre de : \tValeur : " + valeurFinal + ", Couleur : " + couleurFinal + "\n");
@@ -171,33 +171,37 @@ public class PlateauDeJeu {
                                             "(Valeur initial = " + valeurInitial + ",\tValeur actuel = " + valeurFinal + ")\n" +
                                             "De combien souhaitez-vous modifier la valeur du de?\n");
                                     choix = myObj.nextInt();
-                                    System.out.println("Souhaitez-vous agmenter ou diminuer  la valeur du de (+/-)\n");
+                                    System.out.println("Souhaitez-vous augmenter ou diminuer  la valeur du de (+/-)\n");
                                     char operation = myObj.next().charAt(0);
-                                    if (valeurFinal + choix > 6 || valeurFinal - choix < 1) {
-                                        System.out.println("Valeur du de incorrect, veuillez choisir une autre valeur et\\ou operation\n");
-                                        incorrect = true;
-                                    }else {
-                                        int temp;
-                                        switch (operation) {
-                                            case '+':
-                                                temp = valeurFinal + choix;
-                                                if (Math.abs(temp - valeurInitial) > ressourceDisponible) {
-                                                    System.out.println("Vous n'avez pas les ressources pour modifier la valeur du de\n");
-                                                    incorrect = true;
-                                                }
-                                                break;
-                                            case '-':
-                                                temp = valeurFinal - choix;
-                                                if (Math.abs(temp - valeurInitial) > ressourceDisponible) {
-                                                    System.out.println("Vous n'avez pas les ressources pour modifier la valeur du de\n");
-                                                    incorrect = true;
-                                                }
-                                                break;
-                                            default:
-                                                System.out.println("ERREUR");
+
+                                    int temp;
+                                    switch (operation) {
+                                        case '+':
+                                            temp = valeurFinal + choix;
+                                            if (Math.abs(temp - valeurInitial) > ressourceDisponible) {
+                                                System.out.println("Vous n'avez pas les ressources pour modifier la valeur du de\n");
                                                 incorrect = true;
-                                                break;
-                                        }
+                                            }
+                                            if (valeurFinal + choix > 6){
+                                                System.out.println("Valeur du de incorrect, veuillez choisir une autre valeur et\\ou operation\n");
+                                                incorrect = true;
+                                            }
+                                            break;
+                                        case '-':
+                                            temp = valeurFinal - choix;
+                                            if (Math.abs(temp - valeurInitial) > ressourceDisponible) {
+                                                System.out.println("Vous n'avez pas les ressources pour modifier la valeur du de\n");
+                                                incorrect = true;
+                                            }
+                                            if (valeurFinal - choix < 1){
+                                                System.out.println("Valeur du de incorrect, veuillez choisir une autre valeur et\\ou operation\n");
+                                                incorrect = true;
+                                            }
+                                            break;
+                                        default:
+                                            System.out.println("Mauvaise opération");
+                                            incorrect = true;
+                                            break;
                                     }
                                 } while (incorrect);
                             }
@@ -214,11 +218,11 @@ public class PlateauDeJeu {
                                             "En quelle couleur voulez-vous changer la salle (Orange/Bleu/Blanc)?\n");
                                     String couleur = myObj.next();
                                     if(!couleur.equals("Bleu") && !couleur.equals("Blanc") && !couleur.equals("Orange")){
-                                        System.out.println("Couleur incorrect");
+                                        System.out.println("Couleur incorrecte");
                                         incorrect = true;
                                     }else{
                                         if((couleur.equals("Orange") && couleurFinal==0)||(couleur.equals("Bleu") && couleurFinal==1) || (couleur.equals("Blanc") && couleurFinal==2)){
-                                            System.out.println("Couleur identique a la couleur actuel, pas de changement");
+                                            System.out.println("Couleur identique a la couleur actuelle, pas de changement");
                                         }else{
                                             switch(couleur){
                                                 case "Orange":
@@ -241,7 +245,7 @@ public class PlateauDeJeu {
                             break;
                         case 3:
                             //f.secteurs.get(1).ressources += valeurFinal; Pas sur de ce que ça faisait
-                            f.addRessources(1, valeurFinal);
+                            f.addRessources(couleurFinal, valeurFinal);
                             actionEffectuee = true;
                             break;
                         case 4:
@@ -282,7 +286,7 @@ public class PlateauDeJeu {
                                     }while(incorrect);
                                 }
                             }else{
-                                System.out.println("Impossible de faire une action");
+                                System.out.println("Impossible d'effectue une action avec ce de : il n'y a pas assez de budget ici");
                             }
                             break;
                         default:
