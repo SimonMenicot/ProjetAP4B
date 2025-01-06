@@ -250,7 +250,7 @@ public class PlateauDeJeu {
                             break;
                         case 4:
                             Secteur secteur = f.getSecteur(couleurFinal);
-                            if(secteur.projetConcevable[valeurFinal]){
+                            if(secteur.isConcevable(valeurFinal)){
                                 if(secteur.actPrestige[valeurFinal] && secteur.batFonction[valeurFinal]){
                                     System.out.println("Impossible d'effectue une action avec ce de : les 2 actions ont deja ete faite\n");
                                 }else{

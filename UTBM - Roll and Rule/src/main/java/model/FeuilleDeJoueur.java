@@ -2,6 +2,7 @@ package main.java.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class FeuilleDeJoueur {
     protected String nomJoueur;
@@ -20,6 +21,19 @@ public class FeuilleDeJoueur {
         this.scoreFinal = 0;
 
         this.secteurs = new ArrayList<>();
+
+        for (int i = 0; i < 3; i++) {
+            if (i == 0) {
+                this.secteurs.add(new Secteur(i,"Contrat de Subvention", "Pole administratif"));
+            }
+            else if (i == 1) {
+                this.secteurs.add(new Secteur(i,"Constitution d'une association", "Residence étudiante"));
+            }
+            else{
+                this.secteurs.add(new Secteur(i, "Publication d'une thèse", "Laboratoire de recherche"));
+            }
+        }
+        System.out.println("Création d'un secteur");
     }
 
     public int calculScore() {
@@ -36,24 +50,6 @@ public class FeuilleDeJoueur {
     public String getName() {
         return this.nomJoueur;
     }
-    // J'ai pas trop compris le Secteur[3] ducoup j'ai fait ca, ca marche pas vu que je sais pas comment me servir du Secteur[3]
-    // mais dans l'idée faut juste modifier le .add et mettre le bon truc pour ajouter
-    public int createSecteur() {
-        // A faire
-        for (int i = 1; i < 4 + 1; i++) {
-            if (i == 1) {
-                this.secteurs.add(new Secteur(i,"Contrat de Subvention", "Pole administratif"));
-            }
-            else if (i == 2) {
-                this.secteurs.add(new Secteur(i,"Constitution d'une association", "Residence étudiante"));
-            }
-            else if (i == 3){
-                this.secteurs.add(new Secteur(i, "Publication d'une thèse", "Laboratoire de recherche"));
-            }
-        }
-        return 0;
-    }
-
 
     public int getScoreFinal() {
         return scoreFinal;
@@ -69,9 +65,7 @@ public class FeuilleDeJoueur {
         return secteurs.get(secteur).isConcevable(colonne);
     }
 
-    public int getRessources(int secteur){
-        return secteurs.get(secteur).getRessources();
-    }
+    public int getRessources(int secteur){return secteurs.get(secteur).getRessources();}
 
     public int getRessourcesUsed(int secteur){return secteurs.get(secteur).getRessourcesUtilisees();}
 
