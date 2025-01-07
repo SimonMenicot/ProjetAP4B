@@ -1,7 +1,6 @@
 package main.java.controller;
 
 import main.java.model.PlateauDeJeu;
-import main.java.model.RoueDesSemestres;
 
 import java.util.Scanner;
 
