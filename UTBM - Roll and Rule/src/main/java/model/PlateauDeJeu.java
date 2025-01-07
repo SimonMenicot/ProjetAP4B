@@ -144,7 +144,7 @@ public class PlateauDeJeu {
                 }else{
                     numeroSalle = numero + 4 + (tour-1)/2;
                 }*/
-                int couleurInitial = roue.getSecteur(roue.getDe(numero)); //roue.salles.get(numeroSalle).getSecteur();
+                int couleurInitial = roue.getSecteur(roue.getDe(numero-1)); //roue.salles.get(numeroSalle).getSecteur();
                 int couleurFinal = couleurInitial;                        //"          "              "              "
                 int valeurInitial = roue.getDe(numero).getValeur();       //roue.des.get(numeroSalle-1).getValeur();
                 int valeurFinal = valeurInitial;                          // roue.des.get(numero-1).getValeur();

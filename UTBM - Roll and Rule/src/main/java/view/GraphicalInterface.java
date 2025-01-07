@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class GraphicalInterface {
+public class GraphicalInterface implements UI{
     private BufferedImage image;
     private JFrame frame;
     private JLabel selectedDieInfo;
