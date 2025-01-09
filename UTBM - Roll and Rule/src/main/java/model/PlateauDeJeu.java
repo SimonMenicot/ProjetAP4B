@@ -36,7 +36,7 @@ public class PlateauDeJeu {
         /* Initialisation du tour */
         roue.nouveauTour();
         int tour = roue.getTour();
-        if (tour >= 5){ // début de la troisième année au 5ème semestre
+        if (tour >= 6){ // 6 semestres = 3 années
             int i = 0;
             while (!roue.des.get(i).isTransparent()){
                 i++;
@@ -55,28 +55,22 @@ public class PlateauDeJeu {
             boolean peuxJouer = roue.des.get(0).isTransparent();
             // peux jouer est false si le joueur n'a aucune ressource et que le dé noir est en 1ère position
             for(int j = 0 ; j < 3 ; j++){
-                if(f.getRessources(j)-f.getRessourcesUsed(j)>0){
+                if(f.getRessources(j)>0){
                     peuxJouer = true;
                 }
             }
 
-            if(!peuxJouer) {
-                System.out.println("Vous n'avez pas de ressource pour jouer, vous gagnez donc 1 ressource de chaque type\n");
-                for (int j = 0; j < 3; j++) {
-                    f.addRessources(j, 1);
-                }
-            }
-            else{
+            if(peuxJouer){
                 System.out.println("Affichage des dés :\n");
 
                 for(int j = 0 ; j < 4 ; j++){
-                    String deNoir = !roue.getDe(j).isTransparent() ? ", dé noir" : "";
                     if(tour%2==1){
-                        System.out.println("De " + (j+1) +"\tValeur : " + roue.des.get(j).getValeur() + ", Couleur : " + couleurSalle(roue.salles.get(j+tour/2).getSecteur()) + deNoir);
+                        System.out.println("De " + (j+1) +"\tValeur : " + roue.des.get(j).getValeur() + ", Couleur : " + couleurSalle(roue.salles.get(j+tour/2).getSecteur()));
                     }else{
-                        System.out.println("De " + (j+1) +"\tValeur : " + roue.des.get(j).getValeur() + ", Couleur : " + couleurSalle(roue.salles.get(j+tour/2+4).getSecteur()) + deNoir);
+                        System.out.println("De " + (j+1) +"\tValeur : " + roue.des.get(j).getValeur() + ", Couleur : " + couleurSalle(roue.salles.get(j+tour/2+4).getSecteur()));
                     }
                 }
+                /* --------J'ai arrêté ma relecture ici--------- */
                 Scanner myObj = new Scanner(System.in);
                 System.out.println("Entrez le numéro du dé que vous souhaitez sélectionner\n");
                 int numero = myObj.nextInt();
@@ -86,38 +80,38 @@ public class PlateauDeJeu {
                     incorrect = false;
                     if(numero < 1 || numero > 4){
                         incorrect = true;
-                    }else if(!roue.des.get(numero - 1).isTransparent()){
+                    }else if(!roue.des.get(numero - 1).isTransparent){
                         incorrect = true;
-                    }else if(f.getRessources(1)-f.getRessourcesUsed(1)<=1 && numero == 3) {
+                    }else if(f.getSecteur(1).ressources-f.getSecteur(1).ressourcesUtilisees==0 && numero == 3 ) {
                         incorrect = true;
-                    }else if(f.getRessources(1)-f.getRessourcesUsed(1)<=2 && numero == 4){
+                    }else if(f.getSecteur(1).ressources-f.getSecteur(1).ressourcesUtilisees==1 && numero == 4){
                         incorrect = true;
                     }else if(numero == 2){
                         System.out.println("Quelle ressource souhaitez-vous dépensez (F/M/C)?");
                         char choix = myObj.next().charAt(0);
                         switch(choix){
                             case 'F':
-                                if(f.getRessources(0)-f.getRessourcesUsed(0)==0){
+                                if(f.getSecteur(0).ressources-f.getSecteur(0).ressourcesUtilisees==0){
                                     System.out.println("Vous n'avez pas assez de Fonds\n");
                                     incorrect = true;
                                 }else{
-                                    f.useRessources(0, 1);
+                                    f.getSecteur(0).ressourcesUtilisees--;
                                 }
                                 break;
                             case 'M':
-                                if(f.getRessources(1)-f.getRessourcesUsed(1)==0){
+                                if(f.getSecteur(1).ressources-f.getSecteur(1).ressourcesUtilisees==0){
                                     System.out.println("Vous n'avez pas assez de Motivation\n");
                                     incorrect = true;
                                 }else{
-                                    f.useRessources(1, 1);
+                                    f.getSecteur(1).ressourcesUtilisees--;
                                 }
                                 break;
                             case 'C':
-                                if(f.getRessources(2)-f.getRessourcesUsed(2)==0){
+                                if(f.getSecteur(2).ressources-f.getSecteur(2).ressourcesUtilisees==0){
                                     System.out.println("Vous n'avez pas assez de Connaissance\n");
                                     incorrect = true;
                                 }else{
-                                    f.useRessources(2, 1);
+                                    f.getSecteur(2).ressourcesUtilisees--;
                                 }
                                 break;
                             default:
@@ -126,9 +120,9 @@ public class PlateauDeJeu {
                         }
                     }else{
                         if(numero==3){
-                            f.useRessources(1, 1);
+                            f.getSecteur(1).ressourcesUtilisees--;
                         }else if(numero==4){
-                            f.useRessources(1, 2);
+                            f.getSecteur(1).ressourcesUtilisees-=2;
                         }
                     }
                     if(incorrect){
@@ -138,16 +132,16 @@ public class PlateauDeJeu {
 
                 }while(incorrect);
 
-                /*int numeroSalle;
-                if(tour%2==1){
-                    numeroSalle = numero + (tour-1)/2;
+                int numeroSalle;
+                if(roue.numeroTour%2==1){
+                    numeroSalle = numero;
                 }else{
-                    numeroSalle = numero + 4 + (tour-1)/2;
-                }*/
-                int couleurInitial = roue.getSecteur(roue.getDe(numero-1)); //roue.salles.get(numeroSalle).getSecteur();
-                int couleurFinal = couleurInitial;                        //"          "              "              "
-                int valeurInitial = roue.getDe(numero).getValeur();       //roue.des.get(numeroSalle-1).getValeur();
-                int valeurFinal = valeurInitial;                          // roue.des.get(numero-1).getValeur();
+                    numeroSalle = numero + 4;
+                }
+                int couleurInitial = roue.salles.get(numeroSalle).getSecteur();
+                int couleurFinal = roue.salles.get(numeroSalle).getSecteur();
+                int valeurInitial = roue.des.get(numeroSalle-1).getValeur();
+                int valeurFinal = roue.des.get(numero-1).getValeur();
                 boolean actionEffectuee = false;
                 do{
                     System.out.println("Votre de : \tValeur : " + valeurFinal + ", Couleur : " + couleurFinal + "\n");
@@ -160,7 +154,7 @@ public class PlateauDeJeu {
                     int ressourceDisponible = 0;
                     switch(choix){
                         case 1:
-                            ressourceDisponible = f.getRessources(0)-f.getRessourcesUsed(0);
+                            ressourceDisponible = f.getSecteur(0).ressources-f.getSecteur(0).ressourcesUtilisees;
                             if(ressourceDisponible==0){
                                 System.out.println("Vous n'avez pas assez de Fond pour modifier la valeur du de\n");
                                 break;
@@ -171,58 +165,54 @@ public class PlateauDeJeu {
                                             "(Valeur initial = " + valeurInitial + ",\tValeur actuel = " + valeurFinal + ")\n" +
                                             "De combien souhaitez-vous modifier la valeur du de?\n");
                                     choix = myObj.nextInt();
-                                    System.out.println("Souhaitez-vous augmenter ou diminuer  la valeur du de (+/-)\n");
+                                    System.out.println("Souhaitez-vous agmenter ou diminuer  la valeur du de (+/-)\n");
                                     char operation = myObj.next().charAt(0);
-
-                                    int temp;
-                                    switch (operation) {
-                                        case '+':
-                                            temp = valeurFinal + choix;
-                                            if (Math.abs(temp - valeurInitial) > ressourceDisponible) {
-                                                System.out.println("Vous n'avez pas les ressources pour modifier la valeur du de\n");
+                                    if (valeurFinal + choix > 6 || valeurFinal - choix < 1) {
+                                        System.out.println("Valeur du de incorrect, veuillez choisir une autre valeur et\\ou operation\n");
+                                        incorrect = true;
+                                    }else {
+                                        int temp;
+                                        switch (operation) {
+                                            case '+':
+                                                temp = valeurFinal + choix;
+                                                if (Math.abs(temp - valeurInitial) > ressourceDisponible) {
+                                                    System.out.println("Vous n'avez pas les ressources pour modifier la valeur du de\n");
+                                                    incorrect = true;
+                                                }
+                                                break;
+                                            case '-':
+                                                temp = valeurFinal - choix;
+                                                if (Math.abs(temp - valeurInitial) > ressourceDisponible) {
+                                                    System.out.println("Vous n'avez pas les ressources pour modifier la valeur du de\n");
+                                                    incorrect = true;
+                                                }
+                                                break;
+                                            default:
+                                                System.out.println("ERREUR");
                                                 incorrect = true;
-                                            }
-                                            if (valeurFinal + choix > 6){
-                                                System.out.println("Valeur du de incorrect, veuillez choisir une autre valeur et\\ou operation\n");
-                                                incorrect = true;
-                                            }
-                                            break;
-                                        case '-':
-                                            temp = valeurFinal - choix;
-                                            if (Math.abs(temp - valeurInitial) > ressourceDisponible) {
-                                                System.out.println("Vous n'avez pas les ressources pour modifier la valeur du de\n");
-                                                incorrect = true;
-                                            }
-                                            if (valeurFinal - choix < 1){
-                                                System.out.println("Valeur du de incorrect, veuillez choisir une autre valeur et\\ou operation\n");
-                                                incorrect = true;
-                                            }
-                                            break;
-                                        default:
-                                            System.out.println("Mauvaise opération");
-                                            incorrect = true;
-                                            break;
+                                                break;
+                                        }
                                     }
                                 } while (incorrect);
                             }
                             break;
                         case 2:
-                            ressourceDisponible = f.getRessources(2)-f.getRessourcesUsed(2);
+                            ressourceDisponible = f.getSecteur(2).ressources-f.getSecteur(2).ressourcesUtilisees;
                             if(ressourceDisponible<2){
-                                System.out.println("Vous n'avez pas assez de Connaissance pour modifier la couleur du de\n");
+                                System.out.println("Vous n'avez pas assez de Connaissance pour modifier la valeur du de\n");
                             }else{
                                 do{
                                     incorrect = false;
-                                    System.out.println("Vous avez " + ressourceDisponible + " ressources disponibles pour modifier la couleur de la salle \n" +
+                                    System.out.println("Vous avez " + ressourceDisponible + " ressource disponible pour modifier la couleur de la salle \n" +
                                             "(Couleur initial : " + couleurSalle(couleurInitial) +",\tCouleur actuelle : " + couleurSalle(couleurFinal) + "\n" +
                                             "En quelle couleur voulez-vous changer la salle (Orange/Bleu/Blanc)?\n");
                                     String couleur = myObj.next();
                                     if(!couleur.equals("Bleu") && !couleur.equals("Blanc") && !couleur.equals("Orange")){
-                                        System.out.println("Couleur incorrecte");
+                                        System.out.println("Couleur incorrect");
                                         incorrect = true;
                                     }else{
                                         if((couleur.equals("Orange") && couleurFinal==0)||(couleur.equals("Bleu") && couleurFinal==1) || (couleur.equals("Blanc") && couleurFinal==2)){
-                                            System.out.println("Couleur identique a la couleur actuelle, pas de changement");
+                                            System.out.println("Couleur identique a la couleur actuel, pas de changement");
                                         }else{
                                             switch(couleur){
                                                 case "Orange":
@@ -244,13 +234,12 @@ public class PlateauDeJeu {
                             }
                             break;
                         case 3:
-                            //f.secteurs.get(1).ressources += valeurFinal; Pas sur de ce que ça faisait
-                            f.addRessources(couleurFinal, valeurFinal);
+                            gainRessource(f,valeurFinal,couleurFinal);
                             actionEffectuee = true;
                             break;
                         case 4:
                             Secteur secteur = f.getSecteur(couleurFinal);
-                            if(secteur.isConcevable(valeurFinal)){
+                            if(secteur.projetConcevable[valeurFinal]){
                                 if(secteur.actPrestige[valeurFinal] && secteur.batFonction[valeurFinal]){
                                     System.out.println("Impossible d'effectue une action avec ce de : les 2 actions ont deja ete faite\n");
                                 }else{
@@ -263,21 +252,15 @@ public class PlateauDeJeu {
                                         choix = myObj.nextInt();
                                         switch(choix){
                                             case 1:
-                                                if(secteur.actPrestige[valeurFinal]){
-                                                    System.out.println("L'action a deja ete faite\n");
+                                                actionEffectuee = constructionBatiment(f,valeurFinal,couleurFinal,true);
+                                                if(!actionEffectuee){
                                                     incorrect = true;
-                                                }else{
-                                                    secteur.actPrestige[valeurFinal] = true;
-                                                    actionEffectuee = true;
                                                 }
                                                 break;
                                             case 2:
-                                                if(secteur.batFonction[valeurFinal]){
-                                                    System.out.println("Le batiment a deja ete construit\n");
+                                                actionEffectuee = constructionBatiment(f,valeurFinal,couleurFinal,false);
+                                                if(!actionEffectuee){
                                                     incorrect = true;
-                                                }else{
-                                                    secteur.batFonction[valeurFinal] = true;
-                                                    actionEffectuee = true;
                                                 }
                                                 break;
                                             default:
@@ -286,21 +269,26 @@ public class PlateauDeJeu {
                                     }while(incorrect);
                                 }
                             }else{
-                                System.out.println("Impossible d'effectue une action avec ce de : il n'y a pas assez de budget ici");
+                                System.out.println("Impossible de faire une action");
                             }
-                            break;
                         default:
                             System.out.println("Veuillez choisir un chiffre correct");
                             break;
                     }
                 }while (!actionEffectuee);
 
-                f.useRessources(0, Math.abs(valeurFinal-valeurInitial));
+                f.getSecteur(0).ressourcesUtilisees+=Math.abs(valeurFinal-valeurInitial);
                 if(couleurInitial!=couleurFinal){
-                    f.useRessources(2, 2);
+                    f.getSecteur(2).ressourcesUtilisees+=2;
                 }
 
                 //Implémentation de l'application des effets du batiment construit manquant,à rajouter
+
+            }else{
+                System.out.println("Vous n'avez pas de ressource pour jouer, gain de ressource minimum\n");
+                for(int j = 0 ; j < 3 ; j++){
+                    f.getSecteur(j).ajouterRessource(1);
+                }
 
             }
         }
@@ -319,4 +307,196 @@ public class PlateauDeJeu {
                 return "ERROR";
         }
     }
+
+    private void gainRessource(FeuilleDeJoueur feuille,int valeur,int couleur){
+        feuille.getSecteur(couleur).ajouterRessource(valeur);
+
+    }
+
+    private boolean constructionBatiment(FeuilleDeJoueur f,int valeur,int couleur,boolean isActPrestige){
+        boolean actionEffectuee = false;
+        if(isActPrestige){
+            if(f.getSecteur(couleur).actPrestige[valeur]){
+                System.out.println("L'action a deja ete faite\n");
+            }else{
+                f.getSecteur(couleur).actPrestige[valeur] = true;
+                verificationBonusAction(f,couleur,valeur,true);
+                actionEffectuee = true;
+            }
+        }else{
+            if(f.getSecteur(couleur).batFonction[valeur]){
+                System.out.println("L'action a deja ete faite\n");
+            }else{
+                f.getSecteur(couleur).batFonction[valeur] = true;
+                verificationBonusAction(f,couleur,valeur,true);
+                actionEffectuee = true;
+            }
+        }
+        return actionEffectuee;
+    }
+
+
+
+    private void verificationBonusHabitant(FeuilleDeJoueur feuille,int numSecteur,int nbHabitantGagne){
+        switch(numSecteur){
+            case 0:
+                if(feuille.nbPersonnels+nbHabitantGagne>=3 && feuille.nbEnseignants>=3 && feuille.nbEtudiants>=3 && feuille.nbPersonnels-nbHabitantGagne<3){
+                    for(int i = 0; i < 3; ++i){
+                        gainRessource(feuille,1,i);
+                    }
+                }else if(feuille.nbPersonnels+nbHabitantGagne>=6 && feuille.nbEnseignants>=6 && feuille.nbEtudiants>=6 && feuille.nbPersonnels-nbHabitantGagne<6){
+                    System.out.println("Vous pouvez construire le batiment de fonction de votre choix\n" +
+                            "1 - ");
+                }
+        }
+    }
+
+    private void verificationBonusAction(FeuilleDeJoueur feuille,int numSecteur,int numBatimentConstruit,boolean isActionPrestige){
+        Secteur secteur;
+        numBatimentConstruit--;
+        switch(numSecteur){
+            case 0:
+                secteur = feuille.getSecteur(0);
+                if(isActionPrestige){
+                    if((secteur.actPrestige[0] && numBatimentConstruit == 1) || (secteur.actPrestige[1] && numBatimentConstruit == 0)){
+                        feuille.nbPersonnels++;
+                        verificationBonusHabitant(feuille,0,1);
+                    }else if((secteur.actPrestige[2] && numBatimentConstruit == 3) || (secteur.actPrestige[3] && numBatimentConstruit == 2)){
+                        feuille.nbEtudiants++;
+                        verificationBonusHabitant(feuille,1,1);
+                    }else if((secteur.actPrestige[4] && numBatimentConstruit == 5) || (secteur.actPrestige[5] && numBatimentConstruit == 4)){
+                        feuille.nbEnseignants++;
+                        verificationBonusHabitant(feuille,2,1);
+                    }
+                }else{
+                    if((secteur.batFonction[0] && numBatimentConstruit == 1) || (secteur.batFonction[1] && numBatimentConstruit == 0)){
+                        feuille.nbPersonnels+=2;
+                        verificationBonusHabitant(feuille,0,2);
+                    }else if((secteur.batFonction[4] && numBatimentConstruit == 5) || (secteur.batFonction[5] && numBatimentConstruit == 4)){
+                        gainRessource(feuille,3,0);
+                    }
+                }
+                break;
+            case 1:
+                secteur = feuille.getSecteur(1);
+                if(isActionPrestige){
+                    int temp=0;
+                    switch(numBatimentConstruit){
+                        case 0:
+                            for(int i = 0; i<6; i++){
+                                if(feuille.getSecteur(0).actPrestige[i]){
+                                    temp++;
+                                }
+                            }
+                            gainRessource(feuille,temp*3,0);
+                            break;
+                        case 1:
+                            for(int i = 0; i<6; i++){
+                                if(feuille.getSecteur(0).batFonction[i]){
+                                    temp++;
+                                }
+                            }
+                            feuille.nbPersonnels+=2*temp;
+                            verificationBonusHabitant(feuille,0,2*temp);
+                            break;
+                        case 2:
+                            for(int i = 0; i<6; i++){
+                                if(feuille.getSecteur(1).actPrestige[i]){
+                                    temp++;
+                                }
+                            }
+                            gainRessource(feuille,temp*3,1);
+                            break;
+                        case 3:
+                            for(int i = 0; i<6; i++){
+                                if(feuille.getSecteur(1).batFonction[i]){
+                                    temp++;
+                                }
+                            }
+                            feuille.nbEtudiants+=2*temp;
+                            verificationBonusHabitant(feuille,1,2*temp);
+                            break;
+                        case 4:
+                            for(int i = 0; i<6; i++){
+                                if(feuille.getSecteur(2).actPrestige[i]){
+                                    temp++;
+                                }
+                            }
+                            gainRessource(feuille,temp*3,2);
+                            break;
+                        case 5:
+                            for(int i = 0; i<6; i++){
+                                if(feuille.getSecteur(2).batFonction[i]){
+                                    temp++;
+                                }
+                            }
+                            feuille.nbEnseignants+=2*temp;
+                            verificationBonusHabitant(feuille,2,2*temp);
+                            break;
+                        default:
+                            System.out.println("Erreur de numero de batiments");
+                    }
+                }else{
+                    if((secteur.batFonction[0] && numBatimentConstruit == 1) || (secteur.batFonction[1] && numBatimentConstruit == 0)){
+                        gainRessource(feuille,3,1);
+                    }else if((secteur.batFonction[2] && numBatimentConstruit == 3) || (secteur.batFonction[3] && numBatimentConstruit == 2)){
+                        feuille.nbEtudiants+=2;
+                        verificationBonusHabitant(feuille,1,2);
+                    }
+                }
+                break;
+            case 2:
+                secteur = feuille.getSecteur(2);
+                if(isActionPrestige){
+                    int temp=0;
+                    for(int i = 0; i<6; i++){
+                        if(secteur.actPrestige[i]) {
+                            temp++;
+                        }
+                    }
+                    int bonus=0;
+                    if(temp == 1 || temp == 2){
+                        bonus = 1;
+                    }else if(temp == 3 || temp == 4){
+                        bonus = 2;
+                    }else if(temp == 5 || temp == 6){
+                        bonus = 3;
+                    }
+                    switch(numBatimentConstruit){
+                        case 0:
+                            feuille.getSecteur(0).multActPrestige = bonus;
+                            break;
+                        case 1:
+                            feuille.getSecteur(0).multBatFonction = bonus;
+                            break;
+                        case 2:
+                            feuille.getSecteur(1).multActPrestige = bonus;
+                            break;
+                        case 3:
+                            feuille.getSecteur(1).multBatFonction = bonus;
+                            break;
+                        case 4:
+                            feuille.getSecteur(2).multActPrestige = bonus;
+                            break;
+                        case 5:
+                            feuille.getSecteur(2).multBatFonction = bonus;
+                            break;
+                        default:
+                            System.out.println("Erreur de numero de batiments");
+                            break;
+                    }
+                }else{
+                    if((secteur.batFonction[2] && numBatimentConstruit == 3) || (secteur.batFonction[3] && numBatimentConstruit == 2)){
+                        gainRessource(feuille,3,2);
+                    }else if((secteur.batFonction[4] && numBatimentConstruit == 5) || (secteur.batFonction[5] && numBatimentConstruit == 4)){
+                        feuille.nbEnseignants+=2;
+                        verificationBonusHabitant(feuille,2,2);
+                    }
+                }
+                break;
+            default:
+                System.out.println("Erreur de numero de secteur");
+        }
+    }
+
 }
