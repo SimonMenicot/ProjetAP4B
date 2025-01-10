@@ -24,6 +24,7 @@ public class RoueDesSemestres {
         this.salles.add(new Salle(1,2));
         this.salles.add(new Salle(1,2));
         this.salles.add(new Salle(1,1));
+        Collections.shuffle(this.salles);
 
         // Ici on va aléatoirement décider pour chaque salle si on la retourne ou non
         Random rand = new Random();
