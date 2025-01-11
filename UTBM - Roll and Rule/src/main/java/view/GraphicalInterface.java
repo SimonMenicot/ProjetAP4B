@@ -55,19 +55,38 @@ public class GraphicalInterface implements UI {
             sectionPanel.add(titleLabel, BorderLayout.NORTH);
 
             // Panneau pour les 3 premières lignes de 6 cases
-            JPanel topPanel = new JPanel(new GridLayout(3, 6, 140, 10)); // Espacement de 10px entre les cases
+            JPanel topPanel = new JPanel(new GridLayout(3, 11, 50, 10)); // Espacement
             Color sectionColor = (i == 0) ? new Color(255, 69, 0) : (i == 1) ? Color.BLUE : Color.WHITE;
             topPanel.setBorder(BorderFactory.createLineBorder(sectionColor, 2));
             topPanel.setBackground(sectionColor); // Couleur de fond pour les 3 premières sections
 
-            // Remplir les 3 premières lignes de 6 cases
-            for (int j = 0; j < 18; j++) {
-                JLabel cellLabel = new JLabel("", JLabel.CENTER);
-                cellLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                cellLabel.setOpaque(true);
-                cellLabel.setBackground(Color.LIGHT_GRAY);
-                cellLabel.setPreferredSize(new Dimension(40, 40)); // Taille ajustée
-                topPanel.add(cellLabel);
+            // Remplir les 3 premières lignes
+            for (int row = 0; row < 3; row++) {
+                for (int col = 0; col < 11; col++) {
+                    if (col % 2 == 0) {
+                        // Positions paires : Losange ou autre forme
+                        if ((i == 0 && row == 0 && (col == 2 || col == 6 || col == 10)) ||
+                                (i == 0 && row == 1 && (col == 2 || col == 10)) ||
+                                (i == 1 && row == 1 && (col == 2 || col == 6)) ||
+                                (i == 2 && row == 1 && (col == 6 || col == 10))) {
+                            JLabel squareLabel = new JLabel("", JLabel.CENTER);
+                            squareLabel.setOpaque(true);
+                            squareLabel.setBackground(Color.GREEN); // Change la couleur ici
+                            squareLabel.setPreferredSize(new Dimension(40, 40)); // Taille du carré
+                            topPanel.add(squareLabel);
+                        } else {
+                            topPanel.add(new JLabel()); // Case vide
+                        }
+                    } else {
+                        // Positions impaires : Carrés normaux
+                        JLabel cellLabel = new JLabel("", JLabel.CENTER);
+                        cellLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                        cellLabel.setOpaque(true);
+                        cellLabel.setBackground(Color.LIGHT_GRAY);
+                        cellLabel.setPreferredSize(new Dimension(40, 40));
+                        topPanel.add(cellLabel);
+                    }
+                }
             }
 
             // Panneau pour la 4ème ligne de 18 cases
