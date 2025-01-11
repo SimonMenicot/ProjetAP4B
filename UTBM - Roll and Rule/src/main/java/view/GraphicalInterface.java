@@ -21,6 +21,8 @@ public class GraphicalInterface implements UI {
     private JLabel playerNameLabel;
     private JTextArea infoArea;
     private JTextArea dicePositionArea;
+    private JPanel topPanel4;
+    private JLabel[][] cellsSection4;
 
     public GraphicalInterface() {
         // Création de la fenêtre principale
@@ -36,6 +38,7 @@ public class GraphicalInterface implements UI {
     }
 
     public void affichageNomJoueur(FeuilleDeJoueur f) {
+        frame.getContentPane().removeAll();
 
         // Texte en haut avec le nom du joueur
         playerNameLabel = new JLabel("Feuille de " + f.getName(), JLabel.CENTER);
@@ -128,32 +131,35 @@ public class GraphicalInterface implements UI {
         }
 
         // Quatrième section (3 lignes de 20 cases)
-        JPanel sectionPanel = new JPanel();
-        sectionPanel.setLayout(new BorderLayout());
+        JPanel sectionPanel4 = new JPanel();
+        sectionPanel4.setLayout(new BorderLayout());
 
         JLabel titleLabel4 = new JLabel("Piste des membres", JLabel.CENTER);
         titleLabel4.setFont(new Font("Arial", Font.BOLD, 18));
-        sectionPanel.add(titleLabel4, BorderLayout.NORTH);
+        sectionPanel4.add(titleLabel4, BorderLayout.NORTH);
 
         // Panneau pour les 3 lignes de 20 cases
-        JPanel topPanel4 = new JPanel(new GridLayout(3, 20, 10, 10)); // Espacement de 10px entre les cases
+        topPanel4 = new JPanel(new GridLayout(3, 20, 10, 10)); // Espacement de 10px entre les cases
         topPanel4.setBorder(BorderFactory.createLineBorder(Color.decode("#00008B"), 2)); // Bleu foncé autour de la dernière section
+        cellsSection4 = new JLabel[3][20];
 
-        for (int j = 0; j < 60; j++) {
-            JLabel cellLabel = new JLabel("", JLabel.CENTER);
-            cellLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            cellLabel.setOpaque(true);
-            cellLabel.setBackground(Color.LIGHT_GRAY);
-            cellLabel.setPreferredSize(new Dimension(30, 15)); // Hauteur réduite à 15 pour la dernière section
-            topPanel4.add(cellLabel);
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 20; col++) {
+                cellsSection4[row][col] = new JLabel("", JLabel.CENTER);
+                cellsSection4[row][col].setBorder(BorderFactory.createLineBorder(Color.GRAY));
+                cellsSection4[row][col].setOpaque(true);
+                cellsSection4[row][col].setBackground(Color.LIGHT_GRAY);
+                cellsSection4[row][col].setPreferredSize(new Dimension(30, 15));
+                topPanel4.add(cellsSection4[row][col]);
+            }
         }
-        sectionPanel.add(topPanel4, BorderLayout.CENTER);
+        sectionPanel4.add(topPanel4, BorderLayout.CENTER);
 
         // Ajouter un espacement entre la quatrième section et les autres
-        sectionPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 20, 0));
+        sectionPanel4.setBorder(BorderFactory.createEmptyBorder(40, 0, 20, 0));
 
         // Ajouter la quatrième section à la fenêtre
-        centerPanel.add(sectionPanel);
+        centerPanel.add(sectionPanel4);
 
         frame.add(centerPanel, BorderLayout.CENTER);
 
@@ -259,6 +265,26 @@ public class GraphicalInterface implements UI {
 
     }
 
+    public void remplirFeuilleJoueur(FeuilleDeJoueur feuille) {
+        int[] valeurs = {feuille.getNbPersonnels(), feuille.getNbEtudiants(), feuille.getNbEnseignants()};
+
+        Component[] components = topPanel4.getComponents();
+        for (int row = 0; row < 3; row++) {
+            int nbCroix = valeurs[row];
+            for (int col = 0; col < nbCroix; col++) {
+                int index = row * 20 + col;
+                if (index < components.length && components[index] instanceof JLabel) {
+                    JLabel cell = (JLabel) components[index];
+                    cell.setText("X");
+                    cell.setForeground(Color.RED);
+                }
+            }
+        }
+
+        frame.revalidate();
+        frame.repaint();
+    }
+
     private void loadImage(String imagePath, JLabel backgroundLabel) {
         try {
             // Charge l'image à partir du classpath
@@ -273,7 +299,7 @@ public class GraphicalInterface implements UI {
         }
     }
 
-    public void affichageDe(PlateauDeJeu plateau){
+    public void affichageDe(PlateauDeJeu plateau) {
         dicePositionArea.setText("");
         for (int j = 0; j < 4; j++) {
             String deInfo;
@@ -299,50 +325,60 @@ public class GraphicalInterface implements UI {
         }
     }
 
-    public void affichageRessourceInsuffisante(){
+    public void affichageRessourceInsuffisante() {
         infoArea.append("Erreur : Ressources insuffisantes pour effectuer cette action.\n");
     }
 
-    public int MenuTour(PlateauDeJeu plateau,int valeurFinal,int couleurFinal){
+    public int MenuTour(PlateauDeJeu plateau, int valeurFinal, int couleurFinal) {
         infoArea.append("C'est votre tour ! Sélectionnez une action à effectuer.\n");
         return 0;
     }
 
-    public void affichageFondInsuffisant(){
+    public void affichageFondInsuffisant() {
         infoArea.append("Erreur : Fonds insuffisants pour cette action.\n");
     }
 
-    public void affichageScore(PlateauDeJeu plateau){
-        if(plateau.getNbJoueur()==1){
+    public void affichageScore(PlateauDeJeu plateau) {
+        if (plateau.getNbJoueur() == 1) {
             infoArea.append("Vous avez obtenu un score de " + plateau.getFeuillesJoueurs(0).calculScore() + " points. Félicitation !\n");
-        }else{
+        } else {
             List<Integer> winner = new ArrayList<>();
             int best = 0;
-            for(int i = 0 ; i < plateau.getNbJoueur()  ; i++){
+            for (int i = 0; i < plateau.getNbJoueur(); i++) {
                 infoArea.append("\n Le joueur " + (i + 1) + " a obtenu un score de " + plateau.getFeuillesJoueurs(i).calculScore() + " points\n");
-                if(best == 0 || best < plateau.getFeuillesJoueurs(i).calculScore()){
+                if (best == 0 || best < plateau.getFeuillesJoueurs(i).calculScore()) {
                     winner.clear();
                     best = plateau.getFeuillesJoueurs(i).calculScore();
-                    winner.add(i+1);
-                }else if(best == plateau.getFeuillesJoueurs(i).calculScore()){
-                    winner.add(i+1);
+                    winner.add(i + 1);
+                } else if (best == plateau.getFeuillesJoueurs(i).calculScore()) {
+                    winner.add(i + 1);
                 }
             }
-            if(winner.size() == 1){
-                infoArea.append(plateau.getFeuillesJoueurs(winner.getFirst()).getName() +" remporte la partie !\n");
-            }else if(winner.size() > 1 && winner.size() < plateau.getNbJoueur()){
+            if (winner.size() == 1) {
+                infoArea.append(plateau.getFeuillesJoueurs(winner.getFirst()).getName() + " remporte la partie !\n");
+            } else if (winner.size() > 1 && winner.size() < plateau.getNbJoueur()) {
                 infoArea.append("Les joueurs suivant sont à égalité et remportent la victoire :\n");
                 for (Integer integer : winner) {
                     infoArea.append(plateau.getFeuillesJoueurs(integer).getName() + " remporte la partie !\n");
                 }
-            }else{
+            } else {
                 infoArea.append("Tout les joueurs sont à égalité et remportent la victoire :\n");
             }
         }
     }
 
-
+    /* Fonction pour tester l'interface graphique */
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(GraphicalInterface::new);
+        SwingUtilities.invokeLater(() -> {
+            GraphicalInterface gui = new GraphicalInterface();
+
+            FeuilleDeJoueur feuille = new FeuilleDeJoueur("Joueur Test");
+            feuille.addPersonnel(5); // Exemples de valeurs
+            feuille.addEtudiant(10);
+            feuille.addEnseignant(8);
+
+            gui.affichageNomJoueur(feuille);
+            gui.remplirFeuilleJoueur(feuille);
+        });
     }
 }
