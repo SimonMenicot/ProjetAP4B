@@ -1,7 +1,12 @@
 package main.java.controller;
 
-import main.java.model.*;
-import main.java.view.*;
+import main.java.model.De;
+import main.java.model.FeuilleDeJoueur;
+import main.java.model.PlateauDeJeu;
+import main.java.model.Secteur;
+import main.java.view.ConsoleInterface;
+import main.java.view.GraphicalInterface;
+import main.java.view.UI;
 
 import java.util.Scanner;
 
@@ -30,13 +35,13 @@ public class JeuController {
         String choix = myObj.nextLine();
         int choix_ui = Integer.valueOf(choix);
         if (choix_ui == 1){
-            ui = new GraphicalInterface();
+            ui = new GraphicalInterface(plateau.getFeuillesJoueurs(0).getName()); //TODO:changer le paramètre (juste temporaire pour permettre de run)
         }
         else {
             ui = new ConsoleInterface();
         }
         this.jouerTour();
-        ui.affichageScore(plateau);
+
     }
 
     public void jouerTour() {
@@ -57,7 +62,7 @@ public class JeuController {
         /* Actions des joueurs */
         for ( int i = 0 ; i < plateau.getNbJoueur() ; i++){
             FeuilleDeJoueur f = plateau.getFeuillesJoueurs(i);
-            System.out.println("C'est à " + f.getName() + " de jouer\n\n");
+            ui.affichageNomJoueur(f);
             boolean peuxJouer = plateau.getRoue().getDe(0).isTransparent();
             // peux jouer est false si le joueur n'a aucune ressource et que le dé noir est en 1ère position
             for(int j = 0 ; j < 3 ; j++){
@@ -68,7 +73,7 @@ public class JeuController {
             if(peuxJouer){
                 peuxJouer(f);
             }else{
-                System.out.println("Vous n'avez pas de ressource pour jouer, gain de ressource minimum\n");
+                ui.affichageRessourceInsuffisante();
                 for(int j = 0 ; j < 3 ; j++){
                     f.getSecteur(j).ajouterRessource(1);
                 }
@@ -77,7 +82,7 @@ public class JeuController {
         }
     }
 
-    private void peuxJouer(FeuilleDeJoueur f){
+    private void peuxJouer(FeuilleDeJoueur f ){
         ui.affichageDe(plateau);
         int numero = choixDuDe(f);
         Scanner myObj = new Scanner(System.in);
@@ -96,19 +101,13 @@ public class JeuController {
         boolean actionEffectuee = false;
         boolean incorrect;
         do{
-            System.out.println("Votre de : \tValeur : " + valeurFinal + ", Couleur : " + plateau.couleurSalle(couleurFinal) + "\n");
-            System.out.println("Choisissez ce que vous souhaitez faire :\n");
-            System.out.println("\t1 - Modifier la valeur du de\n" +
-                    "\t2 - Modifier la couleur de la salle\n" +
-                    "\t3 - Gagner des ressources\n" +
-                    "\t4 - Faire une action de prestige/construire un batiment de fonction\n");
-            int choix = myObj.nextInt();
+            int choix =ui.MenuTour(plateau,valeurFinal,couleurFinal);
             int ressourceDisponible = 0;
             switch(choix){
                 case 1:
                     ressourceDisponible = f.getSecteur(0).getRessources()-f.getSecteur(0).getRessourcesUtilisees();
                     if(ressourceDisponible==0){
-                        System.out.println("Vous n'avez pas assez de Fond pour modifier la valeur du de\n");
+                        ui.affichageFondInsuffisant();
                         break;
                     }else {
                         do {
@@ -117,7 +116,7 @@ public class JeuController {
                                     "(Valeur initial = " + valeurInitial + ",\tValeur actuel = " + valeurFinal + ")\n" +
                                     "De combien souhaitez-vous modifier la valeur du de?\n");
                             choix = myObj.nextInt();
-                            System.out.println("Souhaitez-vous agmenter ou diminuer  la valeur du de (+/-)\n");
+                            System.out.println("Souhaitez-vous augmenter ou diminuer  la valeur du de (+/-)\n");
                             char operation = myObj.next().charAt(0);
                             if ((valeurFinal + choix > 6 && operation == '+') || (valeurFinal - choix < 1 && operation == '-')) {
                                 System.out.println("Valeur du de incorrect, veuillez choisir une autre valeur et\\ou operation\n");

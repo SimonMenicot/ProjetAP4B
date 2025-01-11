@@ -2,7 +2,6 @@ package main.java.view;
 
 import main.java.model.FeuilleDeJoueur;
 import main.java.model.PlateauDeJeu;
-import main.java.model.RoueDesSemestres;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +28,28 @@ public class ConsoleInterface implements UI{
         }
     }
 
+    public void affichageNomJoueur(FeuilleDeJoueur f){
+        System.out.println("C'est à " + f.getName() + " de jouer\n\n");
+    }
+
+    public void affichageRessourceInsuffisante(){
+        System.out.println("Vous n'avez pas de ressource pour jouer, gain de ressource minimum\n");
+    }
+
+    public void affichageFondInsuffisant(){
+        System.out.println("Vous n'avez pas assez de Fond pour modifier la valeur du de\n");
+    }
+
+    public int MenuTour(PlateauDeJeu plateau,int valeurFinal,int couleurFinal){
+        System.out.println("Votre de : \tValeur : " + valeurFinal + ", Couleur : " + plateau.couleurSalle(couleurFinal) + "\n");
+        System.out.println("Choisissez ce que vous souhaitez faire :\n");
+        System.out.println("\t1 - Modifier la valeur du de\n" +
+                "\t2 - Modifier la couleur de la salle\n" +
+                "\t3 - Gagner des ressources\n" +
+                "\t4 - Faire une action de prestige/construire un batiment de fonction\n");
+        Scanner scan = new Scanner(System.in);
+        return scan.nextInt();
+    }
 
     public void affichageScore(PlateauDeJeu plateau){
         if(plateau.getNbJoueur()==1){
