@@ -6,9 +6,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
-public class GraphicalInterface implements UI{
+public class GraphicalInterface implements UI {
     private BufferedImage image;
     private JFrame frame;
     private JLabel selectedDieInfo;
@@ -26,21 +25,71 @@ public class GraphicalInterface implements UI{
         playerNameLabel.setFont(new Font("Arial", Font.BOLD, 24));
         frame.add(playerNameLabel, BorderLayout.NORTH);
 
-        // Image de fond au centre
-        JLabel backgroundLabel = new JLabel();
-        loadImage("/player_board_utbm.jpg", backgroundLabel);
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new GridLayout(4, 1, 10, 10)); // 4 sections horizontales
 
-        JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.add(backgroundLabel, BorderLayout.CENTER);
+        for (int i = 0; i < 3; i++) {
+            JPanel sectionPanel = new JPanel();
+            sectionPanel.setLayout(new BorderLayout());
 
-        // Zone pour valider ou annuler le tour en dessous de l'image
-        JPanel validateCancelPanel = new JPanel(new FlowLayout());
-        JButton validateTurnButton = new JButton("Valider le tour");
-        JButton cancelButton = new JButton("Annuler");
-        validateCancelPanel.add(validateTurnButton);
-        validateCancelPanel.add(cancelButton);
+            // Panneau pour les 3 premières lignes de 6 cases
+            JPanel topPanel = new JPanel(new GridLayout(3, 6, 140, 10)); // Espacement de 10px entre les cases
+            Color sectionColor = (i == 0) ? new Color(255, 69, 0) : (i == 1) ? Color.BLUE : Color.WHITE;
+            topPanel.setBorder(BorderFactory.createLineBorder(sectionColor, 2));
+            topPanel.setBackground(sectionColor); // Couleur de fond pour les 3 premières sections
 
-        centerPanel.add(validateCancelPanel, BorderLayout.SOUTH);
+            // Remplir les 3 premières lignes de 6 cases
+            for (int j = 0; j < 18; j++) {
+                JLabel cellLabel = new JLabel("", JLabel.CENTER);
+                cellLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                cellLabel.setOpaque(true);
+                cellLabel.setBackground(Color.LIGHT_GRAY);
+                cellLabel.setPreferredSize(new Dimension(40, 40)); // Taille ajustée
+                topPanel.add(cellLabel);
+            }
+
+            // Panneau pour la 4ème ligne de 18 cases
+            JPanel bottomPanel = new JPanel(new GridLayout(1, 18, 10, 10)); // Espacement de 10px entre les cases
+            bottomPanel.setBorder(BorderFactory.createLineBorder(sectionColor, 2));
+            bottomPanel.setBackground(sectionColor); // Couleur de fond pour la ligne de 18 cases
+            for (int j = 0; j < 18; j++) {
+                JLabel cellLabel = new JLabel("", JLabel.CENTER);
+                cellLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                cellLabel.setOpaque(true);
+                cellLabel.setBackground(Color.LIGHT_GRAY);
+                cellLabel.setPreferredSize(new Dimension(40, 40)); // Taille ajustée
+                bottomPanel.add(cellLabel);
+            }
+
+            sectionPanel.add(topPanel, BorderLayout.NORTH);
+            sectionPanel.add(bottomPanel, BorderLayout.SOUTH);
+            centerPanel.add(sectionPanel);
+        }
+
+        // Quatrième section (3 lignes de 20 cases)
+        JPanel sectionPanel = new JPanel();
+        sectionPanel.setLayout(new BorderLayout());
+
+        // Panneau pour les 3 lignes de 20 cases
+        JPanel topPanel4 = new JPanel(new GridLayout(3, 20, 10, 10)); // Espacement de 10px entre les cases
+        topPanel4.setBorder(BorderFactory.createLineBorder(Color.decode("#00008B"), 2)); // Bleu foncé autour de la dernière section
+
+        for (int j = 0; j < 60; j++) {
+            JLabel cellLabel = new JLabel("", JLabel.CENTER);
+            cellLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            cellLabel.setOpaque(true);
+            cellLabel.setBackground(Color.LIGHT_GRAY);
+            cellLabel.setPreferredSize(new Dimension(30, 15)); // Hauteur réduite à 15 pour la dernière section
+            topPanel4.add(cellLabel);
+        }
+        sectionPanel.add(topPanel4, BorderLayout.CENTER);
+
+        // Ajouter un espacement entre la quatrième section et les autres
+        sectionPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 20, 0)); // Espacement de 10 pixels en haut et en bas
+
+        // Ajouter la quatrième section à la fenêtre
+        centerPanel.add(sectionPanel);
+
         frame.add(centerPanel, BorderLayout.CENTER);
 
         // Zone texte à gauche pour indiquer la position des dés sur la roue des semestres
@@ -62,12 +111,26 @@ public class GraphicalInterface implements UI{
             JButton diceButton = new JButton("Dé " + i);
             final int dieIndex = i;
             diceButton.addActionListener(e -> {
-                selectedDieInfo.setText("Dé " + dieIndex + " sélectionné: Valeur = X, Couleur = Y"); // Remplacer X et Y par les valeurs réelles
+                // Utiliser HTML pour le texte du JLabel
+                selectedDieInfo.setText("<html>Dé " + dieIndex + " sélectionné:<br>Valeur = X <br>Couleur = Y</html>");
             });
             diceSelectionPanel.add(diceButton);
         }
 
         leftPanel.add(diceSelectionPanel, BorderLayout.CENTER);
+
+        // Nouvelle section pour afficher des informations, avec de l'espacement en dessous
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BorderLayout());
+        JTextArea infoArea = new JTextArea();
+        infoArea.setEditable(false);
+        infoArea.setText("Informations du jeu:\n");
+        infoArea.setFont(new Font("Arial", Font.PLAIN, 16));
+        infoPanel.add(new JScrollPane(infoArea), BorderLayout.CENTER);
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 300, 0)); // Espacement en dessous
+
+        leftPanel.add(infoPanel, BorderLayout.SOUTH);  // Ajout dans le bas du panneau gauche
+
         frame.add(leftPanel, BorderLayout.WEST);
 
         // Panneau pour les boutons à droite de l'image
@@ -120,16 +183,19 @@ public class GraphicalInterface implements UI{
 
         rightPanel.add(actionPanel, BorderLayout.SOUTH);
 
+        // Ajouter de l'espacement sous la zone "Choix action"
+        actionPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 400, 0)); // Espacement de 10px en dessous
+
         frame.add(rightPanel, BorderLayout.EAST);
 
         // Afficher la fenêtre
         frame.setVisible(true);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre la fenêtre en plein écran
     }
 
     private void loadImage(String imagePath, JLabel backgroundLabel) {
         try {
             // Charge l'image à partir du classpath
-
             image = ImageIO.read(new File(imagePath));
             if (image != null) {
                 backgroundLabel.setIcon(new ImageIcon(image));
