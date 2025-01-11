@@ -35,7 +35,7 @@ public class JeuController {
         String choix = myObj.nextLine();
         int choix_ui = Integer.valueOf(choix);
         if (choix_ui == 1){
-            ui = new GraphicalInterface(plateau.getFeuillesJoueurs(0).getName()); //TODO:changer le paramètre (juste temporaire pour permettre de run)
+            ui = new GraphicalInterface();
         }
         else {
             ui = new ConsoleInterface();
