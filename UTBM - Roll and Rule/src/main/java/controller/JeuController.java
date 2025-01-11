@@ -32,16 +32,9 @@ public class JeuController {
 
         // Choix de l'interface
         System.out.println("Entrez 1 pour l'UI graphique et 2 pour l'UI console : ");
-        String choix = myObj.nextLine();
-        int choix_ui = Integer.valueOf(choix);
-        if (choix_ui == 1){
+        int choix = myObj.nextInt();
+        if (choix == 1){
             ui = new GraphicalInterface();
-            /*
-            //Code à mettre pour tester l'interface graphique :
-            FeuilleDeJoueur joueurTest = new FeuilleDeJoueur("Joueur 1");
-            ui.affichageNomJoueur(joueurTest);
-            */
-
         }
         else {
             ui = new ConsoleInterface();
