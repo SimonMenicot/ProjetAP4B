@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import main.java.model.FeuilleDeJoueur;
 
 public class GraphicalInterface implements UI {
     private BufferedImage image;
@@ -13,15 +14,23 @@ public class GraphicalInterface implements UI {
     private JLabel selectedDieInfo;
     private JLabel playerNameLabel;
 
-    public GraphicalInterface(String playerName) {
+    public GraphicalInterface() {
         // Création de la fenêtre principale
         frame = new JFrame("Interface de Jeu");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1100, 600);
         frame.setLayout(new BorderLayout());
 
+        // Afficher la fenêtre
+        frame.setVisible(true);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre la fenêtre en plein écran
+
+    }
+
+    public void loadFeuille(FeuilleDeJoueur feuille) {
+
         // Texte en haut avec le nom du joueur
-        playerNameLabel = new JLabel("Feuille de " + playerName, JLabel.CENTER);
+        playerNameLabel = new JLabel("Feuille de " + feuille.getName(), JLabel.CENTER);
         playerNameLabel.setFont(new Font("Arial", Font.BOLD, 24));
         frame.add(playerNameLabel, BorderLayout.NORTH);
 
@@ -236,9 +245,7 @@ public class GraphicalInterface implements UI {
 
         frame.add(rightPanel, BorderLayout.EAST);
 
-        // Afficher la fenêtre
-        frame.setVisible(true);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre la fenêtre en plein écran
+
     }
 
     private void loadImage(String imagePath, JLabel backgroundLabel) {
@@ -256,6 +263,6 @@ public class GraphicalInterface implements UI {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new GraphicalInterface("Joueur 1"));
+        SwingUtilities.invokeLater(GraphicalInterface::new);
     }
 }
