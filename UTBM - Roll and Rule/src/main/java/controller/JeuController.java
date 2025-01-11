@@ -28,6 +28,17 @@ public class JeuController {
         // Création plateau de jeu et de la roue des semestres
         plateau = new PlateauDeJeu(n_players);
         ui = new ConsoleInterface();
+
+        // Choix de l'interface
+        System.out.println("Entrez 1 pour l'UI graphique et 2 pour l'UI console : ");
+        String choix = myObj.nextLine();
+        int choix_ui = Integer.valueOf(choix);
+        if (choix_ui == 1){
+            ui = new GraphicalInterface();
+        }
+        else {
+            ui = new ConsoleInterface();
+        }
         this.jouerTour();
     }
 
