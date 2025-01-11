@@ -40,7 +40,6 @@ public class Secteur {
 
     public boolean utiliserRessource(int val) {
         if (val <= ressources) {
-            this.ressources -= val;
             this.ressourcesUtilisees += val;
             return true;
         }
