@@ -40,7 +40,6 @@ public class Secteur {
 
     public boolean utiliserRessource(int val) {
         if (val <= ressources) {
-            this.ressources -= val;
             this.ressourcesUtilisees += val;
             return true;
         }
@@ -67,5 +66,21 @@ public class Secteur {
 
     public boolean isConcevable(int colonne){
         return projetConcevable[colonne];
+    }
+
+    public boolean isDonePrestige(int colonne){
+        return actPrestige[colonne];
+    }
+
+    public boolean isDoneFonction(int colonne){
+        return batFonction[colonne];
+    }
+
+    public void doPrestige(int colonne){
+        actPrestige[colonne] = true;
+    }
+
+    public void doFonction(int colonne){
+        batFonction[colonne] = true;
     }
 }
