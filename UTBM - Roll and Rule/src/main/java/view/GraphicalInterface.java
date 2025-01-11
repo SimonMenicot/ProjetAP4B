@@ -26,11 +26,33 @@ public class GraphicalInterface implements UI {
         frame.add(playerNameLabel, BorderLayout.NORTH);
 
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(4, 1, 10, 10)); // 4 sections horizontales
+        centerPanel.setLayout(new GridLayout(4, 1, 10, 30)); // 4 sections horizontales
 
         for (int i = 0; i < 3; i++) {
             JPanel sectionPanel = new JPanel();
             sectionPanel.setLayout(new BorderLayout());
+
+            if (i == 0) {
+                sectionPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
+            }
+
+            String sectionTitle;
+            switch (i) {
+                case 0:
+                    sectionTitle = "Secteur du personnel";
+                    break;
+                case 1:
+                    sectionTitle = "Secteur des étudiants";
+                    break;
+                case 2:
+                default:
+                    sectionTitle = "Secteur des enseignants-chercheurs";
+                    break;
+            }
+
+            JLabel titleLabel = new JLabel(sectionTitle, JLabel.CENTER);
+            titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+            sectionPanel.add(titleLabel, BorderLayout.NORTH);
 
             // Panneau pour les 3 premières lignes de 6 cases
             JPanel topPanel = new JPanel(new GridLayout(3, 6, 140, 10)); // Espacement de 10px entre les cases
@@ -52,6 +74,7 @@ public class GraphicalInterface implements UI {
             JPanel bottomPanel = new JPanel(new GridLayout(1, 18, 10, 10)); // Espacement de 10px entre les cases
             bottomPanel.setBorder(BorderFactory.createLineBorder(sectionColor, 2));
             bottomPanel.setBackground(sectionColor); // Couleur de fond pour la ligne de 18 cases
+
             for (int j = 0; j < 18; j++) {
                 JLabel cellLabel = new JLabel("", JLabel.CENTER);
                 cellLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -63,12 +86,18 @@ public class GraphicalInterface implements UI {
 
             sectionPanel.add(topPanel, BorderLayout.NORTH);
             sectionPanel.add(bottomPanel, BorderLayout.SOUTH);
+
+
             centerPanel.add(sectionPanel);
         }
 
         // Quatrième section (3 lignes de 20 cases)
         JPanel sectionPanel = new JPanel();
         sectionPanel.setLayout(new BorderLayout());
+
+        JLabel titleLabel4 = new JLabel("Piste des membres", JLabel.CENTER);
+        titleLabel4.setFont(new Font("Arial", Font.BOLD, 18));
+        sectionPanel.add(titleLabel4, BorderLayout.NORTH);
 
         // Panneau pour les 3 lignes de 20 cases
         JPanel topPanel4 = new JPanel(new GridLayout(3, 20, 10, 10)); // Espacement de 10px entre les cases
@@ -85,7 +114,7 @@ public class GraphicalInterface implements UI {
         sectionPanel.add(topPanel4, BorderLayout.CENTER);
 
         // Ajouter un espacement entre la quatrième section et les autres
-        sectionPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 20, 0)); // Espacement de 10 pixels en haut et en bas
+        sectionPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 20, 0));
 
         // Ajouter la quatrième section à la fenêtre
         centerPanel.add(sectionPanel);
