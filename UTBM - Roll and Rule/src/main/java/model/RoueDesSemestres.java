@@ -90,4 +90,8 @@ public class RoueDesSemestres {
     public De getDe(int n){
         return des.get(n);
     }
+
+    public Salle getSalle(int i){
+        return salles.get(i);
+    }
 }

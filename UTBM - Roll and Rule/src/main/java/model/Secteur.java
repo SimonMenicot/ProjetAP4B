@@ -68,4 +68,20 @@ public class Secteur {
     public boolean isConcevable(int colonne){
         return projetConcevable[colonne];
     }
+
+    public boolean isDonePrestige(int colonne){
+        return actPrestige[colonne];
+    }
+
+    public boolean isDoneFonction(int colonne){
+        return batFonction[colonne];
+    }
+
+    public void doPrestige(int colonne){
+        actPrestige[colonne] = true;
+    }
+
+    public void doFonction(int colonne){
+        batFonction[colonne] = true;
+    }
 }
