@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import main.java.model.FeuilleDeJoueur;
 
 public class GraphicalInterface implements UI {
     private BufferedImage image;
@@ -16,45 +17,95 @@ public class GraphicalInterface implements UI {
     private JLabel selectedDieInfo;
     private JLabel playerNameLabel;
 
-    public GraphicalInterface(String playerName) {
+    public GraphicalInterface() {
         // Création de la fenêtre principale
         frame = new JFrame("Interface de Jeu");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1100, 600);
         frame.setLayout(new BorderLayout());
 
+        // Afficher la fenêtre
+        frame.setVisible(true);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre la fenêtre en plein écran
+
+    }
+
+    public void loadFeuille(FeuilleDeJoueur feuille) {
+
         // Texte en haut avec le nom du joueur
-        playerNameLabel = new JLabel("Feuille de " + playerName, JLabel.CENTER);
+        playerNameLabel = new JLabel("Feuille de " + feuille.getName(), JLabel.CENTER);
         playerNameLabel.setFont(new Font("Arial", Font.BOLD, 24));
         frame.add(playerNameLabel, BorderLayout.NORTH);
 
         JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(4, 1, 10, 10)); // 4 sections horizontales
+        centerPanel.setLayout(new GridLayout(4, 1, 10, 30)); // 4 sections horizontales
 
         for (int i = 0; i < 3; i++) {
             JPanel sectionPanel = new JPanel();
             sectionPanel.setLayout(new BorderLayout());
 
+            if (i == 0) {
+                sectionPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
+            }
+
+            String sectionTitle;
+            switch (i) {
+                case 0:
+                    sectionTitle = "Secteur du personnel";
+                    break;
+                case 1:
+                    sectionTitle = "Secteur des étudiants";
+                    break;
+                case 2:
+                default:
+                    sectionTitle = "Secteur des enseignants-chercheurs";
+                    break;
+            }
+
+            JLabel titleLabel = new JLabel(sectionTitle, JLabel.CENTER);
+            titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+            sectionPanel.add(titleLabel, BorderLayout.NORTH);
+
             // Panneau pour les 3 premières lignes de 6 cases
-            JPanel topPanel = new JPanel(new GridLayout(3, 6, 140, 10)); // Espacement de 10px entre les cases
+            JPanel topPanel = new JPanel(new GridLayout(3, 11, 50, 10)); // Espacement
             Color sectionColor = (i == 0) ? new Color(255, 69, 0) : (i == 1) ? Color.BLUE : Color.WHITE;
             topPanel.setBorder(BorderFactory.createLineBorder(sectionColor, 2));
             topPanel.setBackground(sectionColor); // Couleur de fond pour les 3 premières sections
 
-            // Remplir les 3 premières lignes de 6 cases
-            for (int j = 0; j < 18; j++) {
-                JLabel cellLabel = new JLabel("", JLabel.CENTER);
-                cellLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                cellLabel.setOpaque(true);
-                cellLabel.setBackground(Color.LIGHT_GRAY);
-                cellLabel.setPreferredSize(new Dimension(40, 40)); // Taille ajustée
-                topPanel.add(cellLabel);
+            // Remplir les 3 premières lignes
+            for (int row = 0; row < 3; row++) {
+                for (int col = 0; col < 11; col++) {
+                    if (col % 2 == 0) {
+                        // Positions paires : Losange ou autre forme
+                        if ((i == 0 && row == 0 && (col == 2 || col == 6 || col == 10)) ||
+                                (i == 0 && row == 1 && (col == 2 || col == 10)) ||
+                                (i == 1 && row == 1 && (col == 2 || col == 6)) ||
+                                (i == 2 && row == 1 && (col == 6 || col == 10))) {
+                            JLabel squareLabel = new JLabel("", JLabel.CENTER);
+                            squareLabel.setOpaque(true);
+                            squareLabel.setBackground(Color.GREEN); // Change la couleur ici
+                            squareLabel.setPreferredSize(new Dimension(40, 40)); // Taille du carré
+                            topPanel.add(squareLabel);
+                        } else {
+                            topPanel.add(new JLabel()); // Case vide
+                        }
+                    } else {
+                        // Positions impaires : Carrés normaux
+                        JLabel cellLabel = new JLabel("", JLabel.CENTER);
+                        cellLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                        cellLabel.setOpaque(true);
+                        cellLabel.setBackground(Color.LIGHT_GRAY);
+                        cellLabel.setPreferredSize(new Dimension(40, 40));
+                        topPanel.add(cellLabel);
+                    }
+                }
             }
 
             // Panneau pour la 4ème ligne de 18 cases
             JPanel bottomPanel = new JPanel(new GridLayout(1, 18, 10, 10)); // Espacement de 10px entre les cases
             bottomPanel.setBorder(BorderFactory.createLineBorder(sectionColor, 2));
             bottomPanel.setBackground(sectionColor); // Couleur de fond pour la ligne de 18 cases
+
             for (int j = 0; j < 18; j++) {
                 JLabel cellLabel = new JLabel("", JLabel.CENTER);
                 cellLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -66,12 +117,18 @@ public class GraphicalInterface implements UI {
 
             sectionPanel.add(topPanel, BorderLayout.NORTH);
             sectionPanel.add(bottomPanel, BorderLayout.SOUTH);
+
+
             centerPanel.add(sectionPanel);
         }
 
         // Quatrième section (3 lignes de 20 cases)
         JPanel sectionPanel = new JPanel();
         sectionPanel.setLayout(new BorderLayout());
+
+        JLabel titleLabel4 = new JLabel("Piste des membres", JLabel.CENTER);
+        titleLabel4.setFont(new Font("Arial", Font.BOLD, 18));
+        sectionPanel.add(titleLabel4, BorderLayout.NORTH);
 
         // Panneau pour les 3 lignes de 20 cases
         JPanel topPanel4 = new JPanel(new GridLayout(3, 20, 10, 10)); // Espacement de 10px entre les cases
@@ -88,7 +145,7 @@ public class GraphicalInterface implements UI {
         sectionPanel.add(topPanel4, BorderLayout.CENTER);
 
         // Ajouter un espacement entre la quatrième section et les autres
-        sectionPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 20, 0)); // Espacement de 10 pixels en haut et en bas
+        sectionPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 20, 0));
 
         // Ajouter la quatrième section à la fenêtre
         centerPanel.add(sectionPanel);
@@ -253,6 +310,6 @@ public class GraphicalInterface implements UI {
 
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new GraphicalInterface("Joueur 1"));
+        SwingUtilities.invokeLater(GraphicalInterface::new);
     }
 }
