@@ -36,6 +36,12 @@ public class JeuController {
         int choix_ui = Integer.valueOf(choix);
         if (choix_ui == 1){
             ui = new GraphicalInterface();
+            /*
+            //Code à mettre pour tester l'interface graphique :
+            FeuilleDeJoueur joueurTest = new FeuilleDeJoueur("Joueur 1");
+            ui.affichageNomJoueur(joueurTest);
+            */
+
         }
         else {
             ui = new ConsoleInterface();

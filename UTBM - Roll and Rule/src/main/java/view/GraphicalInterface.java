@@ -9,6 +9,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import main.java.model.FeuilleDeJoueur;
 
 public class GraphicalInterface implements UI {
@@ -16,6 +19,7 @@ public class GraphicalInterface implements UI {
     private JFrame frame;
     private JLabel selectedDieInfo;
     private JLabel playerNameLabel;
+    private JTextArea infoArea;
 
     public GraphicalInterface() {
         // Création de la fenêtre principale
@@ -30,10 +34,10 @@ public class GraphicalInterface implements UI {
 
     }
 
-    public void loadFeuille(FeuilleDeJoueur feuille) {
+    public void affichageNomJoueur(FeuilleDeJoueur f) {
 
         // Texte en haut avec le nom du joueur
-        playerNameLabel = new JLabel("Feuille de " + feuille.getName(), JLabel.CENTER);
+        playerNameLabel = new JLabel("Feuille de " + f.getName(), JLabel.CENTER);
         playerNameLabel.setFont(new Font("Arial", Font.BOLD, 24));
         frame.add(playerNameLabel, BorderLayout.NORTH);
 
@@ -182,7 +186,8 @@ public class GraphicalInterface implements UI {
         // Nouvelle section pour afficher des informations, avec de l'espacement en dessous
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BorderLayout());
-        JTextArea infoArea = new JTextArea();
+
+        infoArea = new JTextArea();
         infoArea.setEditable(false);
         infoArea.setText("Informations du jeu:\n");
         infoArea.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -190,7 +195,6 @@ public class GraphicalInterface implements UI {
         infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 300, 0)); // Espacement en dessous
 
         leftPanel.add(infoPanel, BorderLayout.SOUTH);  // Ajout dans le bas du panneau gauche
-
         frame.add(leftPanel, BorderLayout.WEST);
 
         // Panneau pour les boutons à droite de l'image
@@ -268,7 +272,6 @@ public class GraphicalInterface implements UI {
         }
     }
 
-
     public void affichageDe(PlateauDeJeu plateau){
         for(int j = 0 ; j < 4 ; j++){
             if(plateau.getRoue().getTour()%2==1){
@@ -288,24 +291,46 @@ public class GraphicalInterface implements UI {
         }
     }
 
-    public void affichageNomJoueur(FeuilleDeJoueur f){
-
-    }
-
     public void affichageRessourceInsuffisante(){
-
+        infoArea.append("Erreur : Ressources insuffisantes pour effectuer cette action.\n");
     }
 
     public int MenuTour(PlateauDeJeu plateau,int valeurFinal,int couleurFinal){
+        infoArea.append("C'est votre tour ! Sélectionnez une action à effectuer.\n");
         return 0;
     }
 
     public void affichageFondInsuffisant(){
-
+        infoArea.append("Erreur : Fonds insuffisants pour cette action.\n");
     }
 
     public void affichageScore(PlateauDeJeu plateau){
-
+        if(plateau.getNbJoueur()==1){
+            infoArea.append("Vous avez obtenu un score de " + plateau.getFeuillesJoueurs(0).calculScore() + " points. Félicitation !\n");
+        }else{
+            List<Integer> winner = new ArrayList<>();
+            int best = 0;
+            for(int i = 0 ; i < plateau.getNbJoueur()  ; i++){
+                infoArea.append("\n Le joueur " + (i + 1) + " a obtenu un score de " + plateau.getFeuillesJoueurs(i).calculScore() + " points\n");
+                if(best == 0 || best < plateau.getFeuillesJoueurs(i).calculScore()){
+                    winner.clear();
+                    best = plateau.getFeuillesJoueurs(i).calculScore();
+                    winner.add(i+1);
+                }else if(best == plateau.getFeuillesJoueurs(i).calculScore()){
+                    winner.add(i+1);
+                }
+            }
+            if(winner.size() == 1){
+                infoArea.append(plateau.getFeuillesJoueurs(winner.getFirst()).getName() +" remporte la partie !\n");
+            }else if(winner.size() > 1 && winner.size() < plateau.getNbJoueur()){
+                infoArea.append("Les joueurs suivant sont à égalité et remportent la victoire :\n");
+                for (Integer integer : winner) {
+                    infoArea.append(plateau.getFeuillesJoueurs(integer).getName() + " remporte la partie !\n");
+                }
+            }else{
+                infoArea.append("Tout les joueurs sont à égalité et remportent la victoire :\n");
+            }
+        }
     }
 
 
