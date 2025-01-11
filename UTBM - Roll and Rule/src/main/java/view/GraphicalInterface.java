@@ -20,6 +20,7 @@ public class GraphicalInterface implements UI {
     private JLabel selectedDieInfo;
     private JLabel playerNameLabel;
     private JTextArea infoArea;
+    private JTextArea dicePositionArea;
 
     public GraphicalInterface() {
         // Création de la fenêtre principale
@@ -160,7 +161,7 @@ public class GraphicalInterface implements UI {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
 
-        JTextArea dicePositionArea = new JTextArea();
+        dicePositionArea = new JTextArea();
         dicePositionArea.setEditable(false);
         dicePositionArea.setText("Position des dés sur la roue des semestres:\nDé 1 : \nDé 2 : \nDé 3 : \nDé 4 : ");
         dicePositionArea.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -273,21 +274,28 @@ public class GraphicalInterface implements UI {
     }
 
     public void affichageDe(PlateauDeJeu plateau){
-        for(int j = 0 ; j < 4 ; j++){
-            if(plateau.getRoue().getTour()%2==1){
-                if(plateau.getRoue().getDe(j).isTransparent()){
-                    System.out.println("De"  + (j+1) + " : transparent\t Valeur : " + plateau.getRoue().getDe(j).getValeur() + ", Couleur : " + plateau.couleurSalle(plateau.getRoue().getSalle(j+1).getSecteur()));
-
-                }else{
-                    System.out.println("De"  + (j+1) + " : noir\t\t\t Valeur : " + plateau.getRoue().getDe(j).getValeur() + ", Couleur : " + plateau.couleurSalle(plateau.getRoue().getSalle(j+1).getSecteur()));
+        dicePositionArea.setText("");
+        for (int j = 0; j < 4; j++) {
+            String deInfo;
+            if (plateau.getRoue().getTour() % 2 == 1) {
+                if (plateau.getRoue().getDe(j).isTransparent()) {
+                    deInfo = "De" + (j + 1) + " : " + plateau.couleurSalle(plateau.getRoue().getSalle(j + 1).getSecteur()) + ", Valeur : " +
+                            plateau.getRoue().getDe(j).getValeur();
+                } else {
+                    deInfo = "De" + (j + 1) + " : noir, Valeur : " +
+                            plateau.getRoue().getDe(j).getValeur();
                 }
-            }else{
-                if(plateau.getRoue().getDe(j).isTransparent()){
-                    System.out.println("De"  + (j+1) + " : transparent\t Valeur : " + plateau.getRoue().getDe(j).getValeur() + ", Couleur : " + plateau.couleurSalle(plateau.getRoue().getSalle(j+5).getSecteur()));
-                }else{
-                    System.out.println("De"  + (j+1) + " : noir\t\t\t Valeur : " + plateau.getRoue().getDe(j).getValeur() + ", Couleur : " + plateau.couleurSalle(plateau.getRoue().getSalle(j+5).getSecteur()));
+            } else {
+                if (plateau.getRoue().getDe(j).isTransparent()) {
+                    deInfo = "De" + (j + 1) + " : " + plateau.couleurSalle(plateau.getRoue().getSalle(j + 5).getSecteur()) + ", Valeur : " +
+                            plateau.getRoue().getDe(j).getValeur();
+                } else {
+                    deInfo = "De" + (j + 1) + " : Noir, Valeur : " +
+                            plateau.getRoue().getDe(j).getValeur();
                 }
             }
+
+            dicePositionArea.append(deInfo + "\n");
         }
     }
 
