@@ -1,5 +1,8 @@
 package main.java.view;
 
+import main.java.model.FeuilleDeJoueur;
+import main.java.model.PlateauDeJeu;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -191,6 +194,7 @@ public class GraphicalInterface implements UI {
         // Afficher la fenêtre
         frame.setVisible(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre la fenêtre en plein écran
+
     }
 
     private void loadImage(String imagePath, JLabel backgroundLabel) {
@@ -206,6 +210,47 @@ public class GraphicalInterface implements UI {
             System.out.println("Erreur lors du chargement de l'image : " + e.getMessage());
         }
     }
+
+
+    public void affichageDe(PlateauDeJeu plateau){
+        for(int j = 0 ; j < 4 ; j++){
+            if(plateau.getRoue().getTour()%2==1){
+                if(plateau.getRoue().getDe(j).isTransparent()){
+                    System.out.println("De"  + (j+1) + " : transparent\t Valeur : " + plateau.getRoue().getDe(j).getValeur() + ", Couleur : " + plateau.couleurSalle(plateau.getRoue().getSalle(j+1).getSecteur()));
+
+                }else{
+                    System.out.println("De"  + (j+1) + " : noir\t\t\t Valeur : " + plateau.getRoue().getDe(j).getValeur() + ", Couleur : " + plateau.couleurSalle(plateau.getRoue().getSalle(j+1).getSecteur()));
+                }
+            }else{
+                if(plateau.getRoue().getDe(j).isTransparent()){
+                    System.out.println("De"  + (j+1) + " : transparent\t Valeur : " + plateau.getRoue().getDe(j).getValeur() + ", Couleur : " + plateau.couleurSalle(plateau.getRoue().getSalle(j+5).getSecteur()));
+                }else{
+                    System.out.println("De"  + (j+1) + " : noir\t\t\t Valeur : " + plateau.getRoue().getDe(j).getValeur() + ", Couleur : " + plateau.couleurSalle(plateau.getRoue().getSalle(j+5).getSecteur()));
+                }
+            }
+        }
+    }
+
+    public void affichageNomJoueur(FeuilleDeJoueur f){
+
+    }
+
+    public void affichageRessourceInsuffisante(){
+
+    }
+
+    public int MenuTour(PlateauDeJeu plateau,int valeurFinal,int couleurFinal){
+        return 0;
+    }
+
+    public void affichageFondInsuffisant(){
+
+    }
+
+    public void affichageScore(PlateauDeJeu plateau){
+
+    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new GraphicalInterface("Joueur 1"));
