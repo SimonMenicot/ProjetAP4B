@@ -1,11 +1,7 @@
 package main.java.controller;
 
-import main.java.model.De;
-import main.java.model.FeuilleDeJoueur;
-import main.java.model.PlateauDeJeu;
-import main.java.model.Secteur;
-import main.java.view.ConsoleInterface;
-import main.java.view.UI;
+import main.java.model.*;
+import main.java.view.*;
 
 import java.util.Scanner;
 
@@ -40,6 +36,7 @@ public class JeuController {
             ui = new ConsoleInterface();
         }
         this.jouerTour();
+        ui.affichageScore(plateau);
     }
 
     public void jouerTour() {
