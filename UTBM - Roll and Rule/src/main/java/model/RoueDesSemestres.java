@@ -82,7 +82,14 @@ public class RoueDesSemestres {
     }
 
     public int getSecteur(De de){
-        int indexSalle = (des.indexOf(de)+(numeroTour-1)/2)%9;
+        int indexSalle = 0;
+        if(numeroTour%2 == 1){
+            indexSalle = des.indexOf(de) + 1;
+        }else{
+            indexSalle = des.indexOf(de) + 5;
+        }
+        /// La rotation de la roue est effectué à la fin du tour de jeux
+        //int indexSalle = (des.indexOf(de)+(numeroTour-1)/2)%9;
         //(numeroTour-1)/2 pour avoir la rotation de la roue en fonction du tour, %9 pour retourner au bon index lors du dépassement
         return salles.get(indexSalle).getSecteur();
     }
