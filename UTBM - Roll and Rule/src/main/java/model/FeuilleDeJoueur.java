@@ -18,7 +18,6 @@ public class FeuilleDeJoueur {
         this.nbEtudiants = 0; // vérifier si aucun "habitant" en début de partie
         this.nbEnseignants = 0;
         this.nbPersonnels = 0;
-        this.scoreFinal = 0;
 
         this.secteurs = new ArrayList<>();
 
@@ -51,10 +50,6 @@ public class FeuilleDeJoueur {
         return this.nomJoueur;
     }
 
-    public int getScoreFinal() {
-        return scoreFinal;
-    }
-
     public void coupureBudget(int secteur, int colonne){
         if (!secteurs.get(0).actPrestige[colonne]){
             secteurs.get(secteur).coupureBudget(colonne);
@@ -67,11 +62,23 @@ public class FeuilleDeJoueur {
 
     public int getRessources(int secteur){return secteurs.get(secteur).getRessources();}
 
-    public int getRessourcesUsed(int secteur){return secteurs.get(secteur).getRessourcesUtilisees();}
-
-    public void addRessources(int secteur, int ressources){secteurs.get(secteur).ressources += ressources;}
-
-    public void useRessources(int secteur, int ressources){secteurs.get(secteur).ressources += ressources;}
-
     public Secteur getSecteur(int secteur){return secteurs.get(secteur);}
+
+    public int getNbEtudiants(){return nbEtudiants;}
+
+    public int getNbEnseignants(){return nbEnseignants;}
+
+    public int getNbPersonnels(){return nbPersonnels;}
+
+    public void addEnseignant(int n){
+        nbEnseignants += n;
+    }
+
+    public void addEtudiant(int n){
+        nbEtudiants += n;
+    }
+
+    public void addPersonnel(int n){
+        nbPersonnels += n;
+    }
 }

@@ -49,6 +49,25 @@ public class RoueDesSemestres {
     }
 
     public void nouveauTour(){
+        if (numeroTour != 0) {
+            //Permet de retourner la salle avec le dé noir
+            int place = 0;
+            for (int i = 0; i < 4; i++) {
+                if (des.get(i).isTransparent()) {
+                    place = i;
+                }
+            }
+
+            //Change l'ordre des salles
+            if (numeroTour % 2 == 1) {
+                salles.get(place + 1).retourner();
+            } else {
+                salles.get(place + 5).retourner();
+            }
+            salles.addLast(salles.getFirst());
+            salles.remove(salles.getFirst());
+        }
+
         if (numeroTour < 16) {
             numeroTour++;
         }

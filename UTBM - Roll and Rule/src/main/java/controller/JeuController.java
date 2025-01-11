@@ -67,7 +67,6 @@ public class JeuController {
 
             }
         }
-        majTourSuivant();
     }
 
     private void peuxJouer(FeuilleDeJoueur f){
@@ -226,31 +225,11 @@ public class JeuController {
             }
         }while (!actionEffectuee);
 
-        f.getSecteur(0).ressourcesUtilisees+=Math.abs(valeurFinal-valeurInitial);
+        f.getSecteur(0).utiliserRessource(Math.abs(valeurFinal-valeurInitial));
         if(couleurInitial!=couleurFinal){
-            f.getSecteur(2).ressourcesUtilisees+=2;
+            f.getSecteur(2).utiliserRessource(2);
         }
 
-    }
-
-    private void majTourSuivant(){
-        //Permet de retourner la salle avec le dé noir
-        int place=0;
-        for(int i = 0 ; i < 4 ; i++){
-            if(!roue.des.get(i).isTransparent()){
-                place = i;
-            }
-        }
-
-
-        //Change l'ordre des salles
-        if(roue.getTour()%2 == 1){
-            roue.salles.get(place+1).retourner();
-        }else{
-            roue.salles.get(place+5).retourner();
-        }
-        roue.salles.addLast(roue.salles.getFirst());
-        roue.salles.remove(roue.salles.getFirst());
     }
 
     private int choixDuDe(FeuilleDeJoueur f){
@@ -347,22 +326,22 @@ public class JeuController {
             case 0:
                 secteur = feuille.getSecteur(0);
                 if(isActionPrestige){
-                    if((secteur.isDonePrestige() && numBatimentConstruit == 1) || (secteur.isDonePrestige(1) && numBatimentConstruit == 0)){
-                        feuille.nbPersonnels++;
+                    if((secteur.isDonePrestige(0) && numBatimentConstruit == 1) || (secteur.isDonePrestige(1) && numBatimentConstruit == 0)){
+                        feuille.addPersonnel(1);
                         verificationBonusHabitant(feuille,0,1);
-                    }else if((secteur.actPrestige[2] && numBatimentConstruit == 3) || (secteur.actPrestige[3] && numBatimentConstruit == 2)){
-                        feuille.nbEtudiants++;
+                    }else if((secteur.isDonePrestige(2) && numBatimentConstruit == 3) || (secteur.isDonePrestige(3) && numBatimentConstruit == 2)){
+                        feuille.addEtudiant(1);
                         verificationBonusHabitant(feuille,1,1);
-                    }else if((secteur.actPrestige[4] && numBatimentConstruit == 5) || (secteur.actPrestige[5] && numBatimentConstruit == 4)){
-                        feuille.nbEnseignants++;
+                    }else if((secteur.isDonePrestige(4) && numBatimentConstruit == 5) || (secteur.isDonePrestige(5) && numBatimentConstruit == 4)){
+                        feuille.addEnseignant(1);
                         verificationBonusHabitant(feuille,2,1);
                     }
                 }else{
-                    if((secteur.batFonction[0] && numBatimentConstruit == 1) || (secteur.batFonction[1] && numBatimentConstruit == 0)){
-                        feuille.nbPersonnels+=2;
+                    if((secteur.isDoneFonction(0) && numBatimentConstruit == 1) || (secteur.isDoneFonction(1) && numBatimentConstruit == 0)){
+                        feuille.addPersonnel(2);
                         verificationBonusHabitant(feuille,0,2);
-                    }else if((secteur.batFonction[4] && numBatimentConstruit == 5) || (secteur.batFonction[5] && numBatimentConstruit == 4)){
-                        gainRessource(feuille,3,0);
+                    }else if((secteur.isDoneFonction(4) && numBatimentConstruit == 5) || (secteur.isDoneFonction(5) && numBatimentConstruit == 4)){
+                        plateau.gainRessource(feuille,3,0);
                     }
                 }
                 break;
@@ -373,63 +352,63 @@ public class JeuController {
                     switch(numBatimentConstruit){
                         case 0:
                             for(int i = 0; i<6; i++){
-                                if(feuille.getSecteur(0).actPrestige[i]){
+                                if(feuille.getSecteur(0).isDonePrestige(i)){
                                     temp++;
                                 }
                             }
-                            gainRessource(feuille,temp*3,0);
+                            plateau.gainRessource(feuille,temp*3,0);
                             break;
                         case 1:
                             for(int i = 0; i<6; i++){
-                                if(feuille.getSecteur(0).batFonction[i]){
+                                if(feuille.getSecteur(0).isDoneFonction(i)){
                                     temp++;
                                 }
                             }
-                            feuille.nbPersonnels+=2*temp;
+                            feuille.addPersonnel(2*temp);
                             verificationBonusHabitant(feuille,0,2*temp);
                             break;
                         case 2:
                             for(int i = 0; i<6; i++){
-                                if(feuille.getSecteur(1).actPrestige[i]){
+                                if(feuille.getSecteur(1).isDonePrestige(i)){
                                     temp++;
                                 }
                             }
-                            gainRessource(feuille,temp*3,1);
+                            plateau.gainRessource(feuille,temp*3,1);
                             break;
                         case 3:
                             for(int i = 0; i<6; i++){
-                                if(feuille.getSecteur(1).batFonction[i]){
+                                if(feuille.getSecteur(1).isDoneFonction(i)){
                                     temp++;
                                 }
                             }
-                            feuille.nbEtudiants+=2*temp;
+                            feuille.addEtudiant(2*temp);
                             verificationBonusHabitant(feuille,1,2*temp);
                             break;
                         case 4:
                             for(int i = 0; i<6; i++){
-                                if(feuille.getSecteur(2).actPrestige[i]){
+                                if(feuille.getSecteur(2).isDonePrestige(i)){
                                     temp++;
                                 }
                             }
-                            gainRessource(feuille,temp*3,2);
+                            plateau.gainRessource(feuille,temp*3,2);
                             break;
                         case 5:
                             for(int i = 0; i<6; i++){
-                                if(feuille.getSecteur(2).batFonction[i]){
+                                if(feuille.getSecteur(2).isDoneFonction(i)){
                                     temp++;
                                 }
                             }
-                            feuille.nbEnseignants+=2*temp;
+                            feuille.addEnseignant(2*temp);
                             verificationBonusHabitant(feuille,2,2*temp);
                             break;
                         default:
                             System.out.println("Erreur de numero de batiments");
                     }
                 }else{
-                    if((secteur.batFonction[0] && numBatimentConstruit == 1) || (secteur.batFonction[1] && numBatimentConstruit == 0)){
-                        gainRessource(feuille,3,1);
-                    }else if((secteur.batFonction[2] && numBatimentConstruit == 3) || (secteur.batFonction[3] && numBatimentConstruit == 2)){
-                        feuille.nbEtudiants+=2;
+                    if((secteur.isDoneFonction(0) && numBatimentConstruit == 1) || (secteur.isDoneFonction(1) && numBatimentConstruit == 0)){
+                        plateau.gainRessource(feuille,3,1);
+                    }else if((secteur.isDoneFonction(2) && numBatimentConstruit == 3) || (secteur.isDoneFonction(3) && numBatimentConstruit == 2)){
+                        feuille.addEtudiant(2);
                         verificationBonusHabitant(feuille,1,2);
                     }
                 }
@@ -439,7 +418,7 @@ public class JeuController {
                 if(isActionPrestige){
                     int temp=0;
                     for(int i = 0; i<6; i++){
-                        if(secteur.actPrestige[i]) {
+                        if(secteur.isDonePrestige(i)) {
                             temp++;
                         }
                     }
@@ -453,38 +432,340 @@ public class JeuController {
                     }
                     switch(numBatimentConstruit){
                         case 0:
-                            feuille.getSecteur(0).multActPrestige = bonus;
+                            feuille.getSecteur(0).setMultActPrestige(bonus);
                             break;
                         case 1:
-                            feuille.getSecteur(0).multBatFonction = bonus;
+                            feuille.getSecteur(0).setMultBatFonction(bonus);
                             break;
                         case 2:
-                            feuille.getSecteur(1).multActPrestige = bonus;
+                            feuille.getSecteur(1).setMultActPrestige(bonus);
                             break;
                         case 3:
-                            feuille.getSecteur(1).multBatFonction = bonus;
+                            feuille.getSecteur(1).setMultBatFonction(bonus);
                             break;
                         case 4:
-                            feuille.getSecteur(2).multActPrestige = bonus;
+                            feuille.getSecteur(2).setMultActPrestige(bonus);
                             break;
                         case 5:
-                            feuille.getSecteur(2).multBatFonction = bonus;
+                            feuille.getSecteur(2).setMultBatFonction(bonus);
                             break;
                         default:
                             System.out.println("Erreur de numero de batiments");
                             break;
                     }
                 }else{
-                    if((secteur.batFonction[2] && numBatimentConstruit == 3) || (secteur.batFonction[3] && numBatimentConstruit == 2)){
-                        gainRessource(feuille,3,2);
-                    }else if((secteur.batFonction[4] && numBatimentConstruit == 5) || (secteur.batFonction[5] && numBatimentConstruit == 4)){
-                        feuille.nbEnseignants+=2;
+                    if((secteur.isDoneFonction(2) && numBatimentConstruit == 3) || (secteur.isDonePrestige(3) && numBatimentConstruit == 2)){
+                        plateau.gainRessource(feuille,3,2);
+                    }else if((secteur.isDoneFonction(4) && numBatimentConstruit == 5) || (secteur.isDoneFonction(5) && numBatimentConstruit == 4)){
+                        feuille.addEnseignant(2);
                         verificationBonusHabitant(feuille,2,2);
                     }
                 }
                 break;
             default:
                 System.out.println("Erreur de numero de secteur");
+        }
+    }
+
+    private void verificationBonusHabitant(FeuilleDeJoueur feuille,int numSecteur,int nbHabitantGagne){
+        Scanner myObj = new Scanner(System.in);
+        switch(numSecteur){
+            case 0:
+                if(feuille.getNbPersonnels()+nbHabitantGagne>=3 && feuille.getNbEnseignants()>=3 && feuille.getNbEtudiants()>=3 && feuille.getNbPersonnels()-nbHabitantGagne<3){
+                    for(int i = 0; i < 3; ++i){
+                        plateau.gainRessource(feuille,1,i);
+                    }
+                }else if((feuille.getNbPersonnels()+nbHabitantGagne>=6 && feuille.getNbEnseignants()>=6 && feuille.getNbEtudiants()>=6 && feuille.getNbPersonnels()-nbHabitantGagne<6) || (feuille.getNbPersonnels()+nbHabitantGagne>=11 && feuille.getNbEnseignants()>=11 && feuille.getNbEtudiants()>11 && feuille.getNbPersonnels()-nbHabitantGagne<11)){
+                    boolean incorrect;
+                    int secteur=0;
+                    int numBat=0;
+                    do{
+                        incorrect = false;
+                        System.out.println("Vous pouvez construire le batiment de fonction de votre choix\n" +
+                                "Veuillez choisir la catégorie du batiment (Personnel P/Etudiant E/Enseignant C)\n");
+                        char choix = myObj.next().charAt(0);
+                        System.out.println("Choisissez maintenant le numero du batiment\n");
+                        numBat = myObj.nextInt();
+                        switch(choix){
+                            case 'P':
+                                secteur = 0;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,0,false)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            case 'E':
+                                secteur = 1;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,1,false)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            case 'C':
+                                secteur = 2;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,2,false)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            default:
+                                incorrect = true;
+                                break;
+                        }
+                    }while(incorrect);
+                    verificationBonusAction(feuille,secteur,numBat,false);
+
+                }else if(feuille.getNbPersonnels()+nbHabitantGagne<=15 && feuille.getNbPersonnels()-nbHabitantGagne<15){
+                    boolean incorrect;
+                    int secteur=0;
+                    int numBat=0;
+                    do{
+                        incorrect = false;
+                        System.out.println("Vous pouvez faire l'action de prestige de votre choix\n" +
+                                "Veuillez choisir la catégorie du batiment (Etudiant E/Enseignant C)\n");
+                        char choix = myObj.next().charAt(0);
+                        System.out.println("Choisissez maintenant le numero du batiment\n");
+                        numBat = myObj.nextInt();
+                        switch(choix){
+                            case 'E':
+                                secteur = 1;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,secteur,true)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            case 'C':
+                                secteur = 2;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,secteur,true)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            default:
+                                incorrect = true;
+                                break;
+                        }
+                    }while(incorrect);
+                    verificationBonusAction(feuille,secteur,numBat,false);
+                }else if(feuille.getNbPersonnels()+nbHabitantGagne>=20 && feuille.getNbPersonnels()<=20){
+                    feuille.addEtudiant(1);
+                    verificationBonusHabitant(feuille,1,1);
+                    feuille.addEnseignant(1);
+                    verificationBonusHabitant(feuille,2,1);
+                }
+                break;
+            case 1:
+                if(feuille.getNbEtudiants()+nbHabitantGagne>=3 && feuille.getNbPersonnels()>=3 && feuille.getNbEnseignants()>=3 && feuille.getNbEtudiants()-nbHabitantGagne<3){
+                    for(int i = 0; i < 3; ++i){
+                        plateau.gainRessource(feuille,1,i);
+                    }
+                }else if((feuille.getNbEtudiants()+nbHabitantGagne>=6 && feuille.getNbPersonnels()>=6 && feuille.getNbEnseignants()>=6 && feuille.getNbEtudiants()-nbHabitantGagne<6) || (feuille.getNbEtudiants()+nbHabitantGagne>=11 && feuille.getNbPersonnels()>=11 && feuille.getNbEnseignants()>11 && feuille.getNbEtudiants()-nbHabitantGagne<11)){
+                    boolean incorrect;
+                    int secteur=0;
+                    int numBat=0;
+                    do{
+                        incorrect = false;
+                        System.out.println("Vous pouvez construire le batiment de fonction de votre choix\n" +
+                                "Veuillez choisir la catégorie du batiment (Personnel P/Etudiant E/Enseignant C)\n");
+                        char choix = myObj.next().charAt(0);
+                        System.out.println("Choisissez maintenant le numero du batiment\n");
+                        numBat = myObj.nextInt();
+                        switch(choix){
+                            case 'P':
+                                secteur = 0;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,0,false)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            case 'E':
+                                secteur = 1;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,1,false)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            case 'C':
+                                secteur = 2;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,2,false)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            default:
+                                incorrect = true;
+                                break;
+                        }
+                    }while(incorrect);
+                    verificationBonusAction(feuille,secteur,numBat,false);
+
+                }else if(feuille.getNbEtudiants()+nbHabitantGagne<=15 && feuille.getNbEtudiants()-nbHabitantGagne<15){
+                    boolean incorrect;
+                    int secteur=0;
+                    int numBat=0;
+                    do{
+                        incorrect = false;
+                        System.out.println("Vous pouvez faire l'action de prestige de votre choix\n" +
+                                "Veuillez choisir la catégorie du batiment (Personnels P/Enseignant E)\n");
+                        char choix = myObj.next().charAt(0);
+                        System.out.println("Choisissez maintenant le numero du batiment\n");
+                        numBat = myObj.nextInt();
+                        switch(choix){
+                            case 'P':
+                                secteur = 0;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,secteur,true)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            case 'E':
+                                secteur = 2;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,secteur,true)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            default:
+                                incorrect = true;
+                                break;
+                        }
+                    }while(incorrect);
+                    verificationBonusAction(feuille,secteur,numBat,true);
+                }else if(feuille.getNbEtudiants()+nbHabitantGagne>=20 && feuille.getNbEtudiants()<=20){
+                    feuille.addPersonnel(1);
+                    verificationBonusHabitant(feuille,0,1);
+                    feuille.addEtudiant(1);
+                    verificationBonusHabitant(feuille,2,1);
+                }
+                break;
+            case 2:
+                if(feuille.getNbEnseignants()+nbHabitantGagne>=3 && feuille.getNbPersonnels()>=3 && feuille.getNbEtudiants()>=3 && feuille.getNbEnseignants()-nbHabitantGagne<3){
+                    for(int i = 0; i < 3; ++i){
+                        plateau.gainRessource(feuille,1,i);
+                    }
+                }else if((feuille.getNbEnseignants()+nbHabitantGagne>=6 && feuille.getNbPersonnels()>=6 && feuille.getNbEtudiants()>=6 && feuille.getNbEnseignants()-nbHabitantGagne<6) || (feuille.getNbEnseignants()+nbHabitantGagne>=11 && feuille.getNbPersonnels()>=11 && feuille.getNbEtudiants()>11 && feuille.getNbEnseignants()-nbHabitantGagne<11)){
+                    boolean incorrect;
+                    int secteur=0;
+                    int numBat=0;
+                    do{
+                        incorrect = false;
+                        System.out.println("Vous pouvez construire le batiment de fonction de votre choix\n" +
+                                "Veuillez choisir la catégorie du batiment (Personnel P/Etudiant E/Enseignant C)\n");
+                        char choix = myObj.next().charAt(0);
+                        System.out.println("Choisissez maintenant le numero du batiment\n");
+                        numBat = myObj.nextInt();
+                        switch(choix){
+                            case 'P':
+                                secteur = 0;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,0,false)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            case 'E':
+                                secteur = 1;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,1,false)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            case 'C':
+                                secteur = 2;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,2,false)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            default:
+                                incorrect = true;
+                                break;
+                        }
+                    }while(incorrect);
+                    verificationBonusAction(feuille,secteur,numBat,false);
+
+                }else if(feuille.getNbEnseignants()+nbHabitantGagne<=15 && feuille.getNbEnseignants()-nbHabitantGagne<15){
+                    boolean incorrect;
+                    int secteur=0;
+                    int numBat=0;
+                    do{
+                        incorrect = false;
+                        System.out.println("Vous pouvez faire l'action de prestige de votre choix\n" +
+                                "Veuillez choisir la catégorie du batiment (Personnels P/Etudiant E)\n");
+                        char choix = myObj.next().charAt(0);
+                        System.out.println("Choisissez maintenant le numero du batiment\n");
+                        numBat = myObj.nextInt();
+                        switch(choix){
+                            case 'P':
+                                secteur = 0;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,secteur,true)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            case 'E':
+                                secteur = 1;
+                                if(feuille.getSecteur(secteur).isConcevable(numBat)){
+                                    if(!constructionBatiment(feuille,numBat,secteur,true)){
+                                        incorrect = true;
+                                    };
+                                }else{
+                                    incorrect = true;
+                                }
+                                break;
+                            default:
+                                incorrect = true;
+                                break;
+                        }
+                    }while(incorrect);
+                    verificationBonusAction(feuille,secteur,numBat,true);
+                }else if(feuille.getNbEnseignants()+nbHabitantGagne>=20 && feuille.getNbEnseignants()<20){
+                    feuille.addPersonnel(1);
+                    verificationBonusHabitant(feuille,0,1);
+                    feuille.addEtudiant(1);
+                    verificationBonusHabitant(feuille,1,1);
+                }
         }
     }
 

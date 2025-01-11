@@ -83,4 +83,12 @@ public class Secteur {
     public void doFonction(int colonne){
         batFonction[colonne] = true;
     }
+
+    public void setMultActPrestige(int multActPrestige) {
+        this.multActPrestige = multActPrestige;
+    }
+
+    public  void setMultBatFonction(int multBatFonction){
+        this.multBatFonction = multBatFonction;
+    }
 }
