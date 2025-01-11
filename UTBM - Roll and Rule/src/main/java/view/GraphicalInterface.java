@@ -47,7 +47,7 @@ public class GraphicalInterface implements UI {
 
         for (int i = 0; i < 3; i++) {
             JPanel sectionPanel = new JPanel();
-            sectionPanel.setLayout(new BorderLayout());
+            sectionPanel.setLayout(new BorderLayout(10, 10));
 
             if (i == 0) {
                 sectionPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
@@ -80,12 +80,12 @@ public class GraphicalInterface implements UI {
             // Remplir les 3 premières lignes
             for (int row = 0; row < 3; row++) {
                 for (int col = 0; col < 11; col++) {
-                    if (col % 2 == 0) {
+                    if (col % 2 != 0) {
                         // Positions paires : Losange ou autre forme
-                        if ((i == 0 && row == 0 && (col == 2 || col == 6 || col == 10)) ||
-                                (i == 0 && row == 1 && (col == 2 || col == 10)) ||
-                                (i == 1 && row == 1 && (col == 2 || col == 6)) ||
-                                (i == 2 && row == 1 && (col == 6 || col == 10))) {
+                        if ((i == 0 && row == 0 && (col == 1 || col == 5 || col == 9)) ||
+                                (i == 0 && row == 1 && (col == 1 || col == 9)) ||
+                                (i == 1 && row == 1 && (col == 1 || col == 5)) ||
+                                (i == 2 && row == 1 && (col == 5 || col == 9))) {
                             JLabel squareLabel = new JLabel("", JLabel.CENTER);
                             squareLabel.setOpaque(true);
                             squareLabel.setBackground(Color.GREEN); // Change la couleur ici
