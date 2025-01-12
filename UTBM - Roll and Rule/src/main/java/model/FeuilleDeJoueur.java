@@ -32,7 +32,7 @@ public class FeuilleDeJoueur {
                 this.secteurs.add(new Secteur(i, "Publication d'une thèse", "Laboratoire de recherche"));
             }
         }
-        System.out.println("Création d'un secteur");
+        //System.out.println("Création d'un secteur");
     }
 
     public int calculScore() {

@@ -8,6 +8,7 @@ import main.java.view.ConsoleInterface;
 import main.java.view.GraphicalInterface;
 import main.java.view.UI;
 
+import javax.swing.*;
 import java.util.Scanner;
 
 public class JeuController {
@@ -19,6 +20,10 @@ public class JeuController {
     }
 
     public void lancerPartie(){
+        char rejouer;
+        do{
+            rejouer = 'N';
+
         // Choix du nombre de joueurs
         Scanner myObj = new Scanner(System.in);
         System.out.println("Entrez le nombre de joueurs : ");
@@ -28,25 +33,36 @@ public class JeuController {
 
         // Création plateau de jeu et de la roue des semestres
         plateau = new PlateauDeJeu(n_players);
-        ui = new ConsoleInterface();
+
 
         // Choix de l'interface
         System.out.println("Entrez 1 pour l'UI graphique et 2 pour l'UI console : ");
         int choix = myObj.nextInt();
         if (choix == 1){
+
             ui = new GraphicalInterface();
+
         }
         else {
+
             ui = new ConsoleInterface();
         }
-        this.jouerTour();
+        for (int i = 0; i < 16; i++) {
 
+            this.jouerTour();
+        }
+
+        ui.affichageScore(plateau);
+        System.out.println("Souhaitez-vous faire une nouvelle partie (O/N)?");
+        rejouer = myObj.next().charAt(0);
+        } while (rejouer=='O');
     }
 
     public void jouerTour() {
         /* Initialisation du tour */
         plateau.getRoue().nouveauTour();
         int tour = plateau.getRoue().getTour();
+
         if (tour >= 6){ // 6 semestres = 3 années
             int i = 0;
             while (!plateau.getRoue().getDe(i).isTransparent()){
@@ -69,6 +85,7 @@ public class JeuController {
                     peuxJouer = true;
                 }
             }
+
             if(peuxJouer){
                 peuxJouer(f);
             }else{
@@ -79,6 +96,7 @@ public class JeuController {
 
             }
         }
+
     }
 
     private void peuxJouer(FeuilleDeJoueur f ){
@@ -193,8 +211,8 @@ public class JeuController {
                     break;
                 case 4:
                     Secteur secteur = f.getSecteur(couleurFinal);
-                    if(secteur.isConcevable(valeurFinal)){
-                        if(secteur.isDonePrestige(valeurFinal) && secteur.isDoneFonction(valeurFinal)){
+                    if(secteur.isConcevable(valeurFinal-1)){
+                        if(secteur.isDonePrestige(valeurFinal-1) && secteur.isDoneFonction(valeurFinal-1)){
                             System.out.println("Impossible d'effectue une action avec ce de : les 2 actions ont deja ete faite\n");
                         }else{
                             do{
@@ -206,13 +224,13 @@ public class JeuController {
                                 choix = myObj.nextInt();
                                 switch(choix){
                                     case 1:
-                                        actionEffectuee = constructionBatiment(f,valeurFinal,couleurFinal,true);
+                                        actionEffectuee = constructionBatiment(f,valeurFinal-1,couleurFinal,true);
                                         if(!actionEffectuee){
                                             incorrect = true;
                                         }
                                         break;
                                     case 2:
-                                        actionEffectuee = constructionBatiment(f,valeurFinal,couleurFinal,false);
+                                        actionEffectuee = constructionBatiment(f,valeurFinal-1,couleurFinal,false);
                                         if(!actionEffectuee){
                                             incorrect = true;
                                         }
@@ -327,7 +345,6 @@ public class JeuController {
 
     private void verificationBonusAction(FeuilleDeJoueur feuille,int numSecteur,int numBatimentConstruit,boolean isActionPrestige){
         Secteur secteur;
-        numBatimentConstruit--;
         switch(numSecteur){
             case 0:
                 secteur = feuille.getSecteur(0);

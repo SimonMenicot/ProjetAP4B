@@ -450,6 +450,7 @@ public class GraphicalInterface implements UI {
                 infoArea.append("Tout les joueurs sont à égalité et remportent la victoire :\n");
             }
         }
+        frame.dispose();
     }
 
     /* Fonction pour tester l'interface graphique */
