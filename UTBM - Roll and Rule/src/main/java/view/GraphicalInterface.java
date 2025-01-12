@@ -300,6 +300,7 @@ public class GraphicalInterface implements UI {
         // Afficher la fenêtre
         frame.setVisible(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Mettre la fenêtre en plein écran
+        this.remplirFeuilleJoueur(f);
 
     }
 
@@ -451,7 +452,9 @@ public class GraphicalInterface implements UI {
             feuille.getSecteur(2).utiliserRessource(2);
 
             gui.affichageNomJoueur(feuille);
-            gui.remplirFeuilleJoueur(feuille);
+
+            FeuilleDeJoueur feuille2 = new FeuilleDeJoueur("Joueur 2");
+            gui.affichageNomJoueur(feuille2);
         });
     }
 }
