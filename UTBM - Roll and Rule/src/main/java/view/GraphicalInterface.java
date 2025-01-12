@@ -56,7 +56,6 @@ public class GraphicalInterface implements UI {
 
         for (int i = 0; i < 3; i++) {
             JPanel sectionPanel = new JPanel();
-            lPanelsAct[i] = sectionPanel;
             sectionPanel.setLayout(new BorderLayout(10, 10));
 
             if (i == 0) {
@@ -86,6 +85,7 @@ public class GraphicalInterface implements UI {
             Color sectionColor = (i == 0) ? new Color(255, 69, 0) : (i == 1) ? Color.BLUE : Color.WHITE;
             topPanel.setBorder(BorderFactory.createLineBorder(sectionColor, 2));
             topPanel.setBackground(sectionColor); // Couleur de fond pour les 3 premières sections
+            lPanelsAct[i] = topPanel;
 
             // Remplir les 3 premières lignes
             for (int row = 0; row < 3; row++) {
@@ -125,7 +125,7 @@ public class GraphicalInterface implements UI {
                         }
                         else if (row == 0){
                             int text = col/2;
-                            cellLabel.setText(String.valueOf(text));
+                            cellLabel.setText(String.valueOf(text+1));
                             cellLabel.setForeground(Color.BLACK);
                             cellLabel.setHorizontalAlignment(SwingConstants.CENTER);
                             cellLabel.setVerticalAlignment(SwingConstants.CENTER);
@@ -306,21 +306,7 @@ public class GraphicalInterface implements UI {
 
     public void remplirFeuilleJoueur(FeuilleDeJoueur feuille) {
         // Partie Secteurs
-        for (int i = 0; i < 3; i++){/*
-            for (int j = 0; j < 6; j++){
-                boolean[] valeursSecteur = {feuille.getSecteur(i).isDonePrestige(j), feuille.getSecteur(i).isDoneFonction(j)};
-                Component[] components = lPanelsAct[i].getComponents();
-                for (int k = 0; k < valeursSecteur.length; k++) {
-                    int index = i * 6 * 2 + j * 2 + k; // Calcul de l'index en fonction du secteur et de la case
-                    if (index < components.length && components[index] instanceof JLabel) {
-                        JLabel cell = (JLabel) components[index];
-                        if (valeursSecteur[k]) {
-                            cell.setText("X");
-                            cell.setForeground(Color.BLUE); // Couleur pour indiquer les valeurs secteur
-                        }
-                    }
-                }
-            }*/
+        for (int i = 0; i < 3; i++){
             int valeurRessource = feuille.getSecteur(i).getRessourcesUtilisees();
             Component[] resourceComponents = lPanelsRess[i].getComponents();
             for (int k = 0; k < valeurRessource; k++) {
@@ -333,8 +319,6 @@ public class GraphicalInterface implements UI {
                 }
             }
         }
-
-
 
         // Partie Piste des membres
         int[] valeursMembres = {feuille.getNbPersonnels(), feuille.getNbEtudiants(), feuille.getNbEnseignants()};
@@ -351,6 +335,30 @@ public class GraphicalInterface implements UI {
                 }
             }
         }
+
+        //Partie Destruction
+        for (int i = 0; i < 3; i++){
+            Component[] resourceComponents = lPanelsAct[i].getComponents();
+            for (int j = 1; j < 3; j++) {
+                for (int col = 0; col < 11; col++){
+                    int index = j * 11 + col; // Calcul de l'indice correct
+                    if (col % 2 == 0) {
+                        boolean destructionFlags = feuille.getSecteur(i).isConcevable(col/2);
+                        if (index < resourceComponents.length && resourceComponents[index] != null && resourceComponents[index] instanceof JLabel) {
+                            JLabel cellLabel = (JLabel) resourceComponents[index];
+                            if (!destructionFlags && !cellLabel.getBackground().equals(Color.GREEN)) {
+                                cellLabel.setBackground(Color.RED);
+                                System.out.println(cellLabel.getBackground());
+                            }
+                        }
+                    } else {
+                        System.out.println("Index out of bounds: " + index + "  ressourceComponent.lenght : " + resourceComponents.length);
+                    }
+                }
+            }
+
+        }
+
 
         frame.revalidate();
         frame.repaint();
@@ -450,11 +458,10 @@ public class GraphicalInterface implements UI {
             feuille.getSecteur(0).ajouterRessource(4);
             feuille.getSecteur(1).doPrestige(2);
             feuille.getSecteur(2).utiliserRessource(2);
+            feuille.getSecteur(1).coupureBudget(4);
 
             gui.affichageNomJoueur(feuille);
 
-            FeuilleDeJoueur feuille2 = new FeuilleDeJoueur("Joueur 2");
-            gui.affichageNomJoueur(feuille2);
         });
     }
 }
