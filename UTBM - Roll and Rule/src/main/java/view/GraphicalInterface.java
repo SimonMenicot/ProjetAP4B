@@ -47,7 +47,7 @@ public class GraphicalInterface implements UI {
 
     }
 
-    public void affichageNomJoueur(FeuilleDeJoueur f) {
+    public void affichageFiche(FeuilleDeJoueur f) {
         frame.getContentPane().removeAll();
 
         // Texte en haut avec le nom du joueur
@@ -475,7 +475,7 @@ public class GraphicalInterface implements UI {
             feuille.getSecteur(0).doPrestige(0);
             feuille.coupureBudget(2, 0); //La colonne est bien protegée
 
-            gui.affichageNomJoueur(feuille);
+            gui.affichageFiche(feuille);
 
         });
     }

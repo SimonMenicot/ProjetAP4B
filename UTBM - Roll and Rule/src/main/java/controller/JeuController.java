@@ -77,7 +77,7 @@ public class JeuController {
         /* Actions des joueurs */
         for ( int i = 0 ; i < plateau.getNbJoueur() ; i++){
             FeuilleDeJoueur f = plateau.getFeuillesJoueurs(i);
-            ui.affichageNomJoueur(f);
+            ui.affichageFiche(f);
             boolean peuxJouer = plateau.getRoue().getDe(0).isTransparent();
             // peux jouer est false si le joueur n'a aucune ressource et que le dé noir est en 1ère position
             for(int j = 0 ; j < 3 ; j++){
@@ -113,8 +113,8 @@ public class JeuController {
         }
         int couleurInitial = plateau.getRoue().getSalle(numeroSalle).getSecteur();
         int couleurFinal = plateau.getRoue().getSalle(numeroSalle).getSecteur();
-        int valeurInitial = plateau.getRoue().getDe(numeroSalle-1).getValeur();
-        int valeurFinal = plateau.getRoue().getDe(numero-1).getValeur();
+        int valeurInitial = plateau.getRoue().getDe((numeroSalle-1)%4).getValeur();
+        int valeurFinal = plateau.getRoue().getDe((numero-1)%4).getValeur();
         boolean actionEffectuee = false;
         boolean incorrect;
         do{
@@ -244,7 +244,6 @@ public class JeuController {
                         System.out.println("Impossible de faire une action");
                     }
                 default:
-                    System.out.println("Veuillez choisir un chiffre correct");
                     break;
             }
         }while (!actionEffectuee);
@@ -547,7 +546,7 @@ public class JeuController {
                     }while(incorrect);
                     verificationBonusAction(feuille,secteur,numBat,false);
 
-                }else if(feuille.getNbPersonnels()+nbHabitantGagne<=15 && feuille.getNbPersonnels()-nbHabitantGagne<15){
+                }else if(feuille.getNbPersonnels()+nbHabitantGagne>=15 && feuille.getNbPersonnels()-nbHabitantGagne<15){
                     boolean incorrect;
                     int secteur=0;
                     int numBat=0;
@@ -585,7 +584,7 @@ public class JeuController {
                         }
                     }while(incorrect);
                     verificationBonusAction(feuille,secteur,numBat,false);
-                }else if(feuille.getNbPersonnels()+nbHabitantGagne>=20 && feuille.getNbPersonnels()<=20){
+                }else if(feuille.getNbPersonnels()+nbHabitantGagne>=20 && feuille.getNbPersonnels()<20){
                     feuille.addEtudiant(1);
                     verificationBonusHabitant(feuille,1,1);
                     feuille.addEnseignant(1);
@@ -646,7 +645,7 @@ public class JeuController {
                     }while(incorrect);
                     verificationBonusAction(feuille,secteur,numBat,false);
 
-                }else if(feuille.getNbEtudiants()+nbHabitantGagne<=15 && feuille.getNbEtudiants()-nbHabitantGagne<15){
+                }else if(feuille.getNbEtudiants()+nbHabitantGagne>=15 && feuille.getNbEtudiants()-nbHabitantGagne<15){
                     boolean incorrect;
                     int secteur=0;
                     int numBat=0;
@@ -684,7 +683,7 @@ public class JeuController {
                         }
                     }while(incorrect);
                     verificationBonusAction(feuille,secteur,numBat,true);
-                }else if(feuille.getNbEtudiants()+nbHabitantGagne>=20 && feuille.getNbEtudiants()<=20){
+                }else if(feuille.getNbEtudiants()+nbHabitantGagne>=20 && feuille.getNbEtudiants()<20){
                     feuille.addPersonnel(1);
                     verificationBonusHabitant(feuille,0,1);
                     feuille.addEtudiant(1);
@@ -745,7 +744,7 @@ public class JeuController {
                     }while(incorrect);
                     verificationBonusAction(feuille,secteur,numBat,false);
 
-                }else if(feuille.getNbEnseignants()+nbHabitantGagne<=15 && feuille.getNbEnseignants()-nbHabitantGagne<15){
+                }else if(feuille.getNbEnseignants()+nbHabitantGagne>=15 && feuille.getNbEnseignants()-nbHabitantGagne<15){
                     boolean incorrect;
                     int secteur=0;
                     int numBat=0;

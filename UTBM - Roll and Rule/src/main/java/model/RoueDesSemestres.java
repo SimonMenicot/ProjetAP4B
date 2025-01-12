@@ -91,7 +91,7 @@ public class RoueDesSemestres {
             }
             tmp.add(min);
             this.des.remove(min);
-            System.out.println("De : " + min.getValeur());
+            //System.out.println("De : " + min.getValeur());
         }
         this.des.addAll(tmp);
     }
