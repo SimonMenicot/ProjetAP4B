@@ -154,6 +154,9 @@ public class GraphicalInterface implements UI {
                 if (valeursRess > j){
                     cellLabel.setBackground(Color.GREEN);
                 }
+                else if (j == 5 || j == 11 || j == 17){
+                    cellLabel.setBackground(sectionColor);
+                }
                 else{
                     cellLabel.setBackground(Color.LIGHT_GRAY);
                 }
@@ -186,7 +189,12 @@ public class GraphicalInterface implements UI {
                 cellsSection4[row][col] = new JLabel("", JLabel.CENTER);
                 cellsSection4[row][col].setBorder(BorderFactory.createLineBorder(Color.GRAY));
                 cellsSection4[row][col].setOpaque(true);
-                cellsSection4[row][col].setBackground(Color.LIGHT_GRAY);
+                if (col == 2 || col == 5 || col == 10 || col == 14 || col == 19){
+                    cellsSection4[row][col].setBackground(Color.GREEN);
+                }
+                else{
+                    cellsSection4[row][col].setBackground(Color.LIGHT_GRAY);
+                }
                 cellsSection4[row][col].setPreferredSize(new Dimension(30, 15));
                 topPanel4.add(cellsSection4[row][col]);
             }
