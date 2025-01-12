@@ -546,7 +546,7 @@ public class JeuController {
                     }while(incorrect);
                     verificationBonusAction(feuille,secteur,numBat,false);
 
-                }else if(feuille.getNbPersonnels()+nbHabitantGagne<=15 && feuille.getNbPersonnels()-nbHabitantGagne<15){
+                }else if(feuille.getNbPersonnels()+nbHabitantGagne>=15 && feuille.getNbPersonnels()-nbHabitantGagne<15){
                     boolean incorrect;
                     int secteur=0;
                     int numBat=0;
@@ -584,7 +584,7 @@ public class JeuController {
                         }
                     }while(incorrect);
                     verificationBonusAction(feuille,secteur,numBat,false);
-                }else if(feuille.getNbPersonnels()+nbHabitantGagne>=20 && feuille.getNbPersonnels()<=20){
+                }else if(feuille.getNbPersonnels()+nbHabitantGagne>=20 && feuille.getNbPersonnels()<20){
                     feuille.addEtudiant(1);
                     verificationBonusHabitant(feuille,1,1);
                     feuille.addEnseignant(1);
@@ -645,7 +645,7 @@ public class JeuController {
                     }while(incorrect);
                     verificationBonusAction(feuille,secteur,numBat,false);
 
-                }else if(feuille.getNbEtudiants()+nbHabitantGagne<=15 && feuille.getNbEtudiants()-nbHabitantGagne<15){
+                }else if(feuille.getNbEtudiants()+nbHabitantGagne>=15 && feuille.getNbEtudiants()-nbHabitantGagne<15){
                     boolean incorrect;
                     int secteur=0;
                     int numBat=0;
@@ -683,7 +683,7 @@ public class JeuController {
                         }
                     }while(incorrect);
                     verificationBonusAction(feuille,secteur,numBat,true);
-                }else if(feuille.getNbEtudiants()+nbHabitantGagne>=20 && feuille.getNbEtudiants()<=20){
+                }else if(feuille.getNbEtudiants()+nbHabitantGagne>=20 && feuille.getNbEtudiants()<20){
                     feuille.addPersonnel(1);
                     verificationBonusHabitant(feuille,0,1);
                     feuille.addEtudiant(1);
@@ -744,7 +744,7 @@ public class JeuController {
                     }while(incorrect);
                     verificationBonusAction(feuille,secteur,numBat,false);
 
-                }else if(feuille.getNbEnseignants()+nbHabitantGagne<=15 && feuille.getNbEnseignants()-nbHabitantGagne<15){
+                }else if(feuille.getNbEnseignants()+nbHabitantGagne>=15 && feuille.getNbEnseignants()-nbHabitantGagne<15){
                     boolean incorrect;
                     int secteur=0;
                     int numBat=0;

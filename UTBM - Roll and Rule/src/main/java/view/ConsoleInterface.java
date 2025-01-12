@@ -32,14 +32,12 @@ public class ConsoleInterface implements UI{
         System.out.println("\nC'est à " + f.getName() + " de jouer\n");
 
         for(int i = 0 ; i < 3 ; i++){
-            System.out.print("\t\t\t\t\t");
+            System.out.print("\t\t\t\t\t ");
             for(int j = 0 ; j < 6 ; j++){
                 if(f.getSecteur(0).isDonePrestige(j)){
-                    System.out.print("__^__");
+                    System.out.print("__^__ ");
                 }else{
-                    if(j==0){
-                        System.out.print(" ");
-                    }
+
                     System.out.print("      ");
                 }
             }
@@ -72,6 +70,16 @@ public class ConsoleInterface implements UI{
             switch(i){
                 case 0:
                     System.out.print("\tSubvention\t\t");
+                    for(int j = 0 ; j < 3 ; j++){
+                        if(j==0){
+                            System.out.print('|');
+                        }
+                        if(f.getSecteur(i).isDonePrestige(j*2) && f.getSecteur(i).isDonePrestige((j*2)+1)){
+                            System.out.print(" [" + temp.get(j*2) + "]<O>["+temp.get((j*2)+1) + "] |");
+                        }else{
+                            System.out.print(" [" + temp.get(j*2) + "]< >["+temp.get((j*2)+1) + "] |");
+                        }
+                    }
                     break;
                 case 1:
                     System.out.print("\tAssociation\t\t");
@@ -82,11 +90,13 @@ public class ConsoleInterface implements UI{
                 default:
                     System.out.print("\tERREUR_NOM\t\t");
             }
-            for(int j = 0 ; j < 6 ; j++){
-                if(j==0){
-                    System.out.print('|');
+            if(i!=0){
+                for(int j = 0 ; j < 6 ; j++){
+                    if(j==0){
+                        System.out.print('|');
+                    }
+                    System.out.print(" [" + temp.get(j) + "] |");
                 }
-                System.out.print(" [" + temp.get(j) + "] |");
             }
             System.out.print("\n");
             temp.clear();
@@ -102,22 +112,85 @@ public class ConsoleInterface implements UI{
             switch(i){
                 case 0:
                     System.out.print("Pôle administratif\t");
+                    for(int j = 0 ; j < 3 ; j++){
+                        switch(j){
+                            case 0:
+                                System.out.print('|');
+                                if(f.getSecteur(i).isDoneFonction(0) && f.getSecteur(i).isDoneFonction(1)){
+                                    System.out.print(" [" + temp.get(0) + "]<O>["+temp.get(1) + "] |");
+                                }else{
+                                    System.out.print(" [" + temp.get(0) + "]< >["+temp.get(1) + "] |");
+                                }
+                                break;
+                            case 1:
+                                System.out.print(" [" + temp.get(2) + "] | [" + temp.get(3) + "] |");
+                                break;
+                            case 2:
+                                if(f.getSecteur(i).isDoneFonction(4) && f.getSecteur(i).isDoneFonction(5)){
+                                    System.out.print(" [" + temp.get(4) + "]<O>["+temp.get(5) + "] |");
+                                }else{
+                                    System.out.print(" [" + temp.get(4) + "]< >["+temp.get(5) + "] |");
+                                }
+                                break;
+                        }
+                    }
                     break;
                 case 1:
                     System.out.print("Résidence étudiante\t");
+                    for(int j = 0 ; j < 3 ; j++){
+                        switch(j){
+                            case 0:
+                                System.out.print('|');
+                                if(f.getSecteur(i).isDoneFonction(0) && f.getSecteur(i).isDoneFonction(1)){
+                                    System.out.print(" [" + temp.get(0) + "]<O>["+temp.get(1) + "] |");
+                                }else{
+                                    System.out.print(" [" + temp.get(0) + "]< >["+temp.get(1) + "] |");
+                                }
+                                break;
+                            case 1:
+                                if(f.getSecteur(i).isDoneFonction(2) && f.getSecteur(i).isDoneFonction(3)){
+                                    System.out.print(" [" + temp.get(2) + "]<O>["+temp.get(3) + "] |");
+                                }else{
+                                    System.out.print(" [" + temp.get(2) + "]< >["+temp.get(3) + "] |");
+                                }
+
+                                break;
+                            case 2:
+                                System.out.print(" [" + temp.get(4) + "] | [" + temp.get(5) + "] |");
+                                break;
+                        }
+                    }
                     break;
                 case 2:
                     System.out.print("\tLaboratoire\t\t");
+                    for(int j = 0 ; j < 3 ; j++){
+                        switch(j){
+                            case 0:
+                                System.out.print('|');
+                                System.out.print(" [" + temp.get(0) + "] | [" + temp.get(1) + "] |");
+                                break;
+                            case 1:
+                                if(f.getSecteur(i).isDoneFonction(2) && f.getSecteur(i).isDoneFonction(3)){
+                                    System.out.print(" [" + temp.get(2) + "]<O>["+temp.get(3) + "] |");
+                                }else{
+                                    System.out.print(" [" + temp.get(2) + "]< >["+temp.get(3) + "] |");
+                                }
+
+                                break;
+                            case 2:
+                                if(f.getSecteur(i).isDoneFonction(4) && f.getSecteur(i).isDoneFonction(5)){
+                                    System.out.print(" [" + temp.get(4) + "]<O>["+temp.get(5) + "] |");
+                                }else{
+                                    System.out.print(" [" + temp.get(4) + "]< >["+temp.get(5) + "] |");
+                                }
+                                break;
+                        }
+                    }
                     break;
                 default:
                     System.out.print("ERREUR_NOM\t");
             }
-            for(int j = 0 ; j < 6 ; j++){
-                if(j==0){
-                    System.out.print('|');
-                }
-                System.out.print(" [" + temp.get(j) + "] |");
-            }
+
             System.out.print("\n");
             switch(i){
                 case 0:
@@ -144,15 +217,14 @@ public class ConsoleInterface implements UI{
                 }else{
                     System.out.print(" .");
                 }
-
             }
             System.out.print("\n");
         }
-        
-
-
-
-
+        System.out.print("\n");
+        System.out.println("Nombre Personnel : " + f.getNbPersonnels());
+        System.out.println("Nombre étudiant  : " + f.getNbPersonnels());
+        System.out.println("Nombre Enseignant : " + f.getNbEnseignants());
+        System.out.println("\n");
     }
 
     public void affichageRessourceInsuffisante(){
