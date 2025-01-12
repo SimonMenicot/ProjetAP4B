@@ -28,8 +28,131 @@ public class ConsoleInterface implements UI{
         }
     }
 
-    public void affichageNomJoueur(FeuilleDeJoueur f){
-        System.out.println("C'est à " + f.getName() + " de jouer\n\n");
+    public void affichageFiche(FeuilleDeJoueur f){
+        System.out.println("\nC'est à " + f.getName() + " de jouer\n");
+
+        for(int i = 0 ; i < 3 ; i++){
+            System.out.print("\t\t\t\t\t");
+            for(int j = 0 ; j < 6 ; j++){
+                if(f.getSecteur(0).isDonePrestige(j)){
+                    System.out.print("__^__");
+                }else{
+                    if(j==0){
+                        System.out.print(" ");
+                    }
+                    System.out.print("      ");
+                }
+            }
+            System.out.print("\n");
+            switch (i){
+                case 0:
+                    System.out.print("   Secteur Orange");
+                    break;
+                case 1:
+                    System.out.print("   Secteur Bleu  ");
+                    break;
+                case 2:
+                    System.out.print("   Secteur Blanc ");
+                    break;
+                default:
+                    System.out.print("   Secteur Couleur ");
+                    break;
+            }
+            System.out.println("\t|  1  |  2  |  3  |  4  |  5  |  6  |");
+            List<Character> temp = new ArrayList<Character>();
+            for(int j = 0 ; j < 6 ; j++){
+                if(f.getSecteur(i).isDonePrestige(j)){
+                    temp.addLast('O');
+                }else if(!f.getSecteur(i).isConcevable(j)){
+                    temp.addLast('X');
+                }else{
+                    temp.addLast(' ');
+                }
+            }
+            switch(i){
+                case 0:
+                    System.out.print("\tSubvention\t\t");
+                    break;
+                case 1:
+                    System.out.print("\tAssociation\t\t");
+                    break;
+                case 2:
+                    System.out.print("\t   Thèse\t\t");
+                    break;
+                default:
+                    System.out.print("\tERREUR_NOM\t\t");
+            }
+            for(int j = 0 ; j < 6 ; j++){
+                if(j==0){
+                    System.out.print('|');
+                }
+                System.out.print(" [" + temp.get(j) + "] |");
+            }
+            System.out.print("\n");
+            temp.clear();
+            for(int j = 0 ; j < 6 ; j++) {
+                if (f.getSecteur(i).isDoneFonction(j)) {
+                    temp.addLast('O');
+                } else if (!f.getSecteur(i).isConcevable(j)) {
+                    temp.addLast('X');
+                } else {
+                    temp.addLast(' ');
+                }
+            }
+            switch(i){
+                case 0:
+                    System.out.print("Pôle administratif\t");
+                    break;
+                case 1:
+                    System.out.print("Résidence étudiante\t");
+                    break;
+                case 2:
+                    System.out.print("\tLaboratoire\t\t");
+                    break;
+                default:
+                    System.out.print("ERREUR_NOM\t");
+            }
+            for(int j = 0 ; j < 6 ; j++){
+                if(j==0){
+                    System.out.print('|');
+                }
+                System.out.print(" [" + temp.get(j) + "] |");
+            }
+            System.out.print("\n");
+            switch(i){
+                case 0:
+                    System.out.print("Fonds\t\t\t");
+                    break;
+                case 1:
+                    System.out.print("Motivation\t\t");
+                    break;
+                case 2:
+                    System.out.print("Connaissance\t");
+                    break;
+                default:
+                    System.out.print("Ressource\t");
+            }
+            int k;
+            for(k = 0 ; k < 20 ; k++ ){
+                if(k==0){
+                    System.out.print('.');
+                }
+                if(f.getRessources(i)+f.getSecteur(i).getRessourcesUtilisees() - k >f.getRessources(i)){
+                    System.out.print("X.");
+                }else if(k<f.getRessources(i)){
+                    System.out.print("O.");
+                }else{
+                    System.out.print(" .");
+                }
+
+            }
+            System.out.print("\n");
+        }
+        
+
+
+
+
     }
 
     public void affichageRessourceInsuffisante(){

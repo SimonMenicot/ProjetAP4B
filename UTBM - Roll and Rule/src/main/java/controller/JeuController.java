@@ -77,7 +77,7 @@ public class JeuController {
         /* Actions des joueurs */
         for ( int i = 0 ; i < plateau.getNbJoueur() ; i++){
             FeuilleDeJoueur f = plateau.getFeuillesJoueurs(i);
-            ui.affichageNomJoueur(f);
+            ui.affichageFiche(f);
             boolean peuxJouer = plateau.getRoue().getDe(0).isTransparent();
             // peux jouer est false si le joueur n'a aucune ressource et que le dé noir est en 1ère position
             for(int j = 0 ; j < 3 ; j++){
@@ -113,8 +113,8 @@ public class JeuController {
         }
         int couleurInitial = plateau.getRoue().getSalle(numeroSalle).getSecteur();
         int couleurFinal = plateau.getRoue().getSalle(numeroSalle).getSecteur();
-        int valeurInitial = plateau.getRoue().getDe(numeroSalle-1).getValeur();
-        int valeurFinal = plateau.getRoue().getDe(numero-1).getValeur();
+        int valeurInitial = plateau.getRoue().getDe((numeroSalle-1)%4).getValeur();
+        int valeurFinal = plateau.getRoue().getDe((numero-1)%4).getValeur();
         boolean actionEffectuee = false;
         boolean incorrect;
         do{
@@ -244,7 +244,6 @@ public class JeuController {
                         System.out.println("Impossible de faire une action");
                     }
                 default:
-                    System.out.println("Veuillez choisir un chiffre correct");
                     break;
             }
         }while (!actionEffectuee);

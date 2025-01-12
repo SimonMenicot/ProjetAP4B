@@ -7,7 +7,7 @@ public interface UI {
 
     void affichageDe(PlateauDeJeu plateau);
 
-    void affichageNomJoueur(FeuilleDeJoueur f);
+    void affichageFiche(FeuilleDeJoueur f);
 
     void affichageRessourceInsuffisante();
 
