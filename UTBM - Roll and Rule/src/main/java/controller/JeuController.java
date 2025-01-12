@@ -1,9 +1,6 @@
 package main.java.controller;
 
-import main.java.model.De;
-import main.java.model.FeuilleDeJoueur;
-import main.java.model.PlateauDeJeu;
-import main.java.model.Secteur;
+import main.java.model.*;
 import main.java.view.ConsoleInterface;
 import main.java.view.GraphicalInterface;
 import main.java.view.UI;
@@ -35,20 +32,18 @@ public class JeuController {
         plateau = new PlateauDeJeu(n_players);
 
 
+
+
         // Choix de l'interface
         System.out.println("Entrez 1 pour l'UI graphique et 2 pour l'UI console : ");
         int choix = myObj.nextInt();
         if (choix == 1){
-
-            ui = new GraphicalInterface();
-
-        }
-        else {
-
+            ui = new GraphicalInterface(plateau.getRoue());
+        } else {
             ui = new ConsoleInterface();
         }
-        for (int i = 0; i < 16; i++) {
 
+        for (int i = 0; i < 16; i++) {
             this.jouerTour();
         }
 

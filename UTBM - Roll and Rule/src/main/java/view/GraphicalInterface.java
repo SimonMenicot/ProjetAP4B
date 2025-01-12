@@ -1,7 +1,6 @@
 package main.java.view;
 
-import main.java.model.FeuilleDeJoueur;
-import main.java.model.PlateauDeJeu;
+import main.java.model.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -26,8 +25,12 @@ public class GraphicalInterface implements UI {
     private JPanel[] lPanelsAct;
     private JPanel[] lPanelsRess;
 
+    private RoueDesSemestres roueDesSemestres;
 
-    public GraphicalInterface() {
+
+    public GraphicalInterface(RoueDesSemestres roue) {
+        roueDesSemestres = roue;
+
         lPanelsAct = new JPanel[3];
         lPanelsRess = new JPanel[3];
 
@@ -57,6 +60,8 @@ public class GraphicalInterface implements UI {
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new GridLayout(4, 1, 10, 30)); // 4 sections horizontales
+
+        int couleurOrig, couleurFin, valeurOrig, valeurFin; //pour track les changements sur le dé
 
         for (int i = 0; i < 3; i++) {
             JPanel sectionPanel = new JPanel();
@@ -232,7 +237,24 @@ public class GraphicalInterface implements UI {
             JButton diceButton = new JButton("Dé " + i);
             final int dieIndex = i;
             diceButton.addActionListener(e -> {
-                selectedDieInfo.setText("<html>Dé " + dieIndex + " sélectionné:<br>Valeur = X <br>Couleur = Y</html>");
+                De de = roueDesSemestres.getDe(dieIndex-1);
+                int valeur = de.getValeur();
+                String couleur = "";
+                if (!de.isTransparent()){
+                    couleur = "Noir";
+                }else{
+                    switch(roueDesSemestres.getSecteur(de)){
+                        case 0:
+                            couleur = "Orange";
+                            break;
+                        case 1:
+                            couleur = "Bleu";
+                            break;
+                        case 2:
+                            couleur = "Blanc";
+                    }
+                }
+                selectedDieInfo.setText("<html>Dé " + dieIndex + " sélectionné:<br>Valeur = " + valeur + "<br>Couleur = " + couleur + "</html>");
             });
             diceSelectionPanel.add(diceButton);
         }
@@ -460,7 +482,7 @@ public class GraphicalInterface implements UI {
     /* Fonction pour tester l'interface graphique */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            GraphicalInterface gui = new GraphicalInterface();
+            GraphicalInterface gui = new GraphicalInterface(new RoueDesSemestres());
 
             FeuilleDeJoueur feuille = new FeuilleDeJoueur("Joueur Test");
             feuille.addPersonnel(5);
