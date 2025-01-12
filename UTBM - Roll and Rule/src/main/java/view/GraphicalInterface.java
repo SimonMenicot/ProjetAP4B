@@ -459,6 +459,10 @@ public class GraphicalInterface implements UI {
             feuille.getSecteur(1).doPrestige(2);
             feuille.getSecteur(2).utiliserRessource(2);
             feuille.getSecteur(1).coupureBudget(4);
+            feuille.getSecteur(2).doPrestige(1);
+            feuille.getSecteur(2).coupureBudget(1);
+            feuille.getSecteur(0).doPrestige(0);
+            feuille.coupureBudget(2, 0); //La colonne est bien protegée
 
             gui.affichageNomJoueur(feuille);
 
