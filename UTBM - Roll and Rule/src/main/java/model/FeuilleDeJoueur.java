@@ -9,7 +9,6 @@ public class FeuilleDeJoueur {
     protected int nbEtudiants;
     protected int nbEnseignants;
     protected int nbPersonnels;
-    protected int scoreFinal;
 
     private List<Secteur> secteurs;
 
@@ -54,10 +53,6 @@ public class FeuilleDeJoueur {
         if (!secteurs.get(0).actPrestige[colonne]){
             secteurs.get(secteur).coupureBudget(colonne);
         }
-    }
-
-    public boolean isConcevable(int secteur, int colonne){
-        return secteurs.get(secteur).isConcevable(colonne);
     }
 
     public int getRessources(int secteur){return secteurs.get(secteur).getRessources();}

@@ -78,7 +78,7 @@ public class RoueDesSemestres {
 
     }
 
-    public void ordonnerDes() {
+    private void ordonnerDes() {
         List<De> tmp = new ArrayList<>();
         for (int i = 1; i < 5; i++) {
             De min = this.des.getFirst();
