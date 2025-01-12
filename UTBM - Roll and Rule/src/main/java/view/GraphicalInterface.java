@@ -31,6 +31,10 @@ public class GraphicalInterface implements UI {
         lPanelsAct = new JPanel[3];
         lPanelsRess = new JPanel[3];
 
+        dicePositionArea = new JTextArea();
+        dicePositionArea.setEditable(false);
+        dicePositionArea.setFont(new Font("Arial", Font.PLAIN, 16));
+
         // Création de la fenêtre principale
         frame = new JFrame("Interface de Jeu");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -359,7 +363,7 @@ public class GraphicalInterface implements UI {
                             }
                         }
                     } else {
-                        System.out.println("Index out of bounds: " + index + "  ressourceComponent.lenght : " + resourceComponents.length);
+                        //System.out.println("Index out of bounds: " + index + "  ressourceComponent.lenght : " + resourceComponents.length);
                     }
                 }
             }
@@ -385,7 +389,7 @@ public class GraphicalInterface implements UI {
     }
 
     public void affichageDe(PlateauDeJeu plateau) {
-        dicePositionArea.setText("");
+        this.dicePositionArea.setText("");
         for (int j = 0; j < 4; j++) {
             String deInfo;
             if (plateau.getRoue().getTour() % 2 == 1) {
