@@ -80,8 +80,8 @@ public class GraphicalInterface implements UI {
             titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
             sectionPanel.add(titleLabel, BorderLayout.NORTH);
 
-            // Panneau pour les 3 premières lignes de 6 cases
-            JPanel topPanel = new JPanel(new GridLayout(3, 11, 50, 10)); // Espacement
+            // Panneau pour les 3 premières lignes de 11 cases
+            JPanel topPanel = new JPanel(new GridLayout(3, 11, 50, 10));
             Color sectionColor = (i == 0) ? new Color(255, 69, 0) : (i == 1) ? Color.BLUE : Color.WHITE;
             topPanel.setBorder(BorderFactory.createLineBorder(sectionColor, 2));
             topPanel.setBackground(sectionColor); // Couleur de fond pour les 3 premières sections
@@ -91,15 +91,15 @@ public class GraphicalInterface implements UI {
             for (int row = 0; row < 3; row++) {
                 for (int col = 0; col < 11; col++) {
                     if (col % 2 != 0) {
-                        // Positions paires : Losange ou autre forme
+                        // Positions paires carré vert bonus
                         if ((i == 0 && row == 1 && (col == 1 || col == 5 || col == 9)) ||
                                 (i == 0 && row == 2 && (col == 1 || col == 9)) ||
                                 (i == 1 && row == 2 && (col == 1 || col == 5)) ||
                                 (i == 2 && row == 2 && (col == 5 || col == 9))) {
                             JLabel squareLabel = new JLabel("", JLabel.CENTER);
                             squareLabel.setOpaque(true);
-                            squareLabel.setBackground(Color.GREEN); // Change la couleur ici
-                            squareLabel.setPreferredSize(new Dimension(40, 40)); // Taille du carré
+                            squareLabel.setBackground(Color.GREEN);
+                            squareLabel.setPreferredSize(new Dimension(40, 40));
                             topPanel.add(squareLabel);
                         } else {
                             topPanel.add(new JLabel()); // Case vide
@@ -120,8 +120,8 @@ public class GraphicalInterface implements UI {
                         cellLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                         cellLabel.setOpaque(true);
                         if (valeursSecteur) {
-                            cellLabel.setBackground(Color.GREEN); // Définit la couleur en vert
-                            cellLabel.setForeground(Color.BLACK); // Ajuste la couleur du texte pour le contraste
+                            cellLabel.setBackground(Color.GREEN);
+                            cellLabel.setForeground(Color.BLACK);
                         }
                         else if (row == 0){
                             int text = col/2;
@@ -140,7 +140,7 @@ public class GraphicalInterface implements UI {
             }
 
             // Panneau pour la 4ème ligne de 18 cases
-            JPanel bottomPanel = new JPanel(new GridLayout(1, 18, 10, 10)); // Espacement de 10px entre les cases
+            JPanel bottomPanel = new JPanel(new GridLayout(1, 18, 10, 10));
             lPanelsRess[i] = bottomPanel;
             bottomPanel.setBorder(BorderFactory.createLineBorder(sectionColor, 2));
             bottomPanel.setBackground(sectionColor); // Couleur de fond pour la ligne de 18 cases
@@ -160,7 +160,7 @@ public class GraphicalInterface implements UI {
                 else{
                     cellLabel.setBackground(Color.LIGHT_GRAY);
                 }
-                cellLabel.setPreferredSize(new Dimension(40, 40)); // Taille ajustée
+                cellLabel.setPreferredSize(new Dimension(40, 40));
                 bottomPanel.add(cellLabel);
             }
 
@@ -180,8 +180,8 @@ public class GraphicalInterface implements UI {
         sectionPanel4.add(titleLabel4, BorderLayout.NORTH);
 
         // Panneau pour les 3 lignes de 20 cases
-        topPanel4 = new JPanel(new GridLayout(3, 20, 10, 10)); // Espacement de 10px entre les cases
-        topPanel4.setBorder(BorderFactory.createLineBorder(Color.decode("#00008B"), 2)); // Bleu foncé autour de la dernière section
+        topPanel4 = new JPanel(new GridLayout(3, 20, 10, 10));
+        topPanel4.setBorder(BorderFactory.createLineBorder(Color.decode("#00008B"), 2)); // Bleu foncé
         cellsSection4 = new JLabel[3][20];
 
         for (int row = 0; row < 3; row++) {
@@ -209,7 +209,7 @@ public class GraphicalInterface implements UI {
 
         frame.add(centerPanel, BorderLayout.CENTER);
 
-        // Zone texte à gauche pour indiquer la position des dés sur la roue des semestres
+        // Zone de texte à gauche pour indiquer la position des dés sur la roue des semestres
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
 
@@ -219,7 +219,7 @@ public class GraphicalInterface implements UI {
         dicePositionArea.setFont(new Font("Arial", Font.PLAIN, 16));
         leftPanel.add(new JScrollPane(dicePositionArea), BorderLayout.NORTH);
 
-        // Zone sélection du dé sous la zone de texte
+        // Zone de sélection du dé sous la zone de texte
         JPanel diceSelectionPanel = new JPanel();
         diceSelectionPanel.setLayout(new GridLayout(2, 2, 5, 5));
         diceSelectionPanel.setBorder(BorderFactory.createTitledBorder("Sélection du dé"));
@@ -228,7 +228,6 @@ public class GraphicalInterface implements UI {
             JButton diceButton = new JButton("Dé " + i);
             final int dieIndex = i;
             diceButton.addActionListener(e -> {
-                // Utiliser HTML pour le texte du JLabel
                 selectedDieInfo.setText("<html>Dé " + dieIndex + " sélectionné:<br>Valeur = X <br>Couleur = Y</html>");
             });
             diceSelectionPanel.add(diceButton);
@@ -236,7 +235,7 @@ public class GraphicalInterface implements UI {
 
         leftPanel.add(diceSelectionPanel, BorderLayout.CENTER);
 
-        // Nouvelle section pour afficher des informations, avec de l'espacement en dessous
+        // Nouvelle section pour afficher les informations du jeu, avec de l'espacement en dessous
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BorderLayout());
 
@@ -245,7 +244,7 @@ public class GraphicalInterface implements UI {
         infoArea.setText("Informations du jeu:\n");
         infoArea.setFont(new Font("Arial", Font.PLAIN, 16));
         infoPanel.add(new JScrollPane(infoArea), BorderLayout.CENTER);
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 300, 0)); // Espacement en dessous
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 300, 0));
 
         leftPanel.add(infoPanel, BorderLayout.SOUTH);  // Ajout dans le bas du panneau gauche
         frame.add(leftPanel, BorderLayout.WEST);
@@ -253,17 +252,17 @@ public class GraphicalInterface implements UI {
         // Panneau pour les boutons à droite de l'image
         JPanel rightPanel = new JPanel(new BorderLayout());
 
-        // Zone affichage des informations du dé sélectionné (au centre de la colonne droite)
+        // Zone d'affichage des informations du dé sélectionné (au centre de la colonne droite)
         selectedDieInfo = new JLabel("Aucun dé sélectionné", JLabel.CENTER);
         selectedDieInfo.setBorder(BorderFactory.createTitledBorder("Informations du dé"));
         rightPanel.add(selectedDieInfo, BorderLayout.NORTH);
 
-        // Zone modification du dé
+        // Zone de modification du dé
         JPanel modifyDiePanel = new JPanel();
         modifyDiePanel.setLayout(new GridLayout(1, 2));
         modifyDiePanel.setBorder(BorderFactory.createTitledBorder("Modification du dé"));
 
-        // Sous-zone pour changer la valeur
+        // Sous-zone pour changer la valeur du dé
         JPanel valuePanel = new JPanel(new GridLayout(2, 1));
         JButton increaseValueButton = new JButton("+1");
         JButton decreaseValueButton = new JButton("-1");
@@ -272,7 +271,7 @@ public class GraphicalInterface implements UI {
 
         modifyDiePanel.add(valuePanel);
 
-        // Sous-zone pour changer la couleur
+        // Sous-zone pour changer la couleur du dé
         JPanel colorPanel = new JPanel(new GridLayout(3, 1));
         JButton whiteButton = new JButton("Blanc");
         JButton blueButton = new JButton("Bleu");
@@ -285,7 +284,7 @@ public class GraphicalInterface implements UI {
 
         rightPanel.add(modifyDiePanel, BorderLayout.CENTER);
 
-        // Zone choix action
+        // Zone de choix d'action
         JPanel actionPanel = new JPanel();
         actionPanel.setLayout(new GridLayout(3, 1, 5, 5));
         actionPanel.setBorder(BorderFactory.createTitledBorder("Choix action"));
@@ -349,7 +348,7 @@ public class GraphicalInterface implements UI {
             Component[] resourceComponents = lPanelsAct[i].getComponents();
             for (int j = 1; j < 3; j++) {
                 for (int col = 0; col < 11; col++){
-                    int index = j * 11 + col; // Calcul de l'indice correct
+                    int index = j * 11 + col;
                     if (col % 2 == 0) {
                         boolean destructionFlags = feuille.getSecteur(i).isConcevable(col/2);
                         if (index < resourceComponents.length && resourceComponents[index] != null && resourceComponents[index] instanceof JLabel) {
@@ -374,7 +373,6 @@ public class GraphicalInterface implements UI {
 
     private void loadImage(String imagePath, JLabel backgroundLabel) {
         try {
-            // Charge l'image à partir du classpath
             image = ImageIO.read(new File(imagePath));
             if (image != null) {
                 backgroundLabel.setIcon(new ImageIcon(image));
@@ -460,7 +458,7 @@ public class GraphicalInterface implements UI {
             GraphicalInterface gui = new GraphicalInterface();
 
             FeuilleDeJoueur feuille = new FeuilleDeJoueur("Joueur Test");
-            feuille.addPersonnel(5); // Exemples de valeurs
+            feuille.addPersonnel(5);
             feuille.addEtudiant(10);
             feuille.addEnseignant(8);
             feuille.getSecteur(0).ajouterRessource(4);
